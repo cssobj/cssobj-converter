@@ -28,7 +28,9 @@ function convertObj (src) {
     switch (v.type) {
     case 'atrule':
     case 'rule':
-      getObj(v)[name(v)] = {}
+      var p = getObj(v)
+      var sel = name(v)
+      p[sel] = p[sel] || {}
       break
     case 'decl':
       getObj(v)[v.prop] = v.value
