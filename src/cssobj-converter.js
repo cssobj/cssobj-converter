@@ -30,7 +30,7 @@ function convertObj (src) {
     switch (v.type) {
     case 'atrule':
       if(reOneRule.test(v.name)){
-        store[v.name] = v.params
+        store['@'+v.name] = v.params
         break
       }
     case 'rule':
