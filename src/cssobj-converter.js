@@ -2,6 +2,8 @@ var postcss = require('postcss')
 
 var src = 'h1{font-size:12px;color:blue;}\n@media(max-width: 800px){color:purple; p{color:red;}}'
 
+var reOneRule = /^(?:charset|import|namespace)/
+
 function convertObj (src) {
   var ast = postcss().process(src).result.root
 
@@ -27,6 +29,10 @@ function convertObj (src) {
   ast.walk(v => {
     switch (v.type) {
     case 'atrule':
+      if(reOneRule.test(v.name)){
+        store[v.name] = v.params
+        break
+      }
     case 'rule':
       var p = getObj(v)
       var sel = name(v)
