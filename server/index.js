@@ -1,5 +1,7 @@
 var convert = require('../src/cssobj-converter.js')
+var esformatter = require('esformatter')
 var http = require('http')
+var util = require('util')
 var debug = require('debug')('cssobj')
 
 var port = 8080
@@ -26,7 +28,13 @@ var server = http.createServer((req, res) => {
         debug(e)
         return res.end('')
       }
-      res.end(JSON.stringify(result, null, 2))
+
+      var str = util.inspect(result, {depth:null})
+      str = esformatter.format('var r=' + str)
+
+      // res.end(JSON.stringify(result, null, 2))
+      res.end( str.replace('var r = ', '') )
+
     })
   }
 }).listen(port, e => console.log('Listen on ', port))

@@ -39,7 +39,15 @@ function convertObj (src) {
       p[sel] = p[sel] || {}
       break
     case 'decl':
-      getObj(v)[v.prop] = v.value
+      // put back IE hacks from v.raws
+      var prop = ''
+
+      var prefix = v.raws.before.match(/[*_]+$/)
+      if(prefix) prop = prefix.pop().replace(/_/g, '\\\\_')
+
+      prop += v.prop.replace(/-/g, '_')
+
+      getObj(v)[prop] = v.value
     }
   })
 
