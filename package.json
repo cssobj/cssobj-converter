@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "./src/cssobj-converter.js",
+  "bin": {
+    "cssobj-converter": "./cli/cssobj-converter.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "node server/index"
@@ -11,6 +14,7 @@
   "license": "ISC",
   "dependencies": {
     "esformatter": "^0.9.5",
+    "minimist": "^1.2.0",
     "postcss": "^5.0.21"
   }
 }

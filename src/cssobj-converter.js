@@ -15,10 +15,10 @@ function convertObj (src) {
     if (v.type == 'atrule') return util.format(
       '@%s %s',
       v.name,
-      v.params.replace(/\n/g, ' ')
+      v.params.replace(/[\n\r]/g, ' ')
     )
 
-    if (v.type == 'rule') return v.selector.replace(/\n/g, ' ')
+    if (v.type == 'rule') return v.selector.replace(/[\n\r]/g, ' ')
 
   }
 
