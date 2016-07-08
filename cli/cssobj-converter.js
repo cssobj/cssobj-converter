@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/bin/env node
 
 var fs = require('fs')
 var util = require('util')

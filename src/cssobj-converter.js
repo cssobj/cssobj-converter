@@ -5,6 +5,9 @@ var src = 'h1{font-size:12px;color:blue;}\n@media(max-width: 800px){color:purple
 
 var reOneRule = /^(?:charset|import|namespace)/
 
+// for old node(0.10), using \\ instead of \\\\
+var backSlash = util.inspect({'\\_':1}).length===12 ? '\\' : '\\\\'
+
 function convertObj (src) {
   var ast = postcss().process(src).result.root
 
@@ -34,7 +37,7 @@ function convertObj (src) {
     return n
   }
 
-  ast.walk(v => {
+  ast.walk(function(v) {
     switch (v.type) {
     case 'atrule':
       if(reOneRule.test(v.name)){
@@ -52,7 +55,7 @@ function convertObj (src) {
       var value = v.value
 
       var prefix = v.raws.before.match(/[*_]+$/)
-      if(prefix) prop = prefix.pop().replace(/_/g, '\\\\_')
+      if(prefix) prop = prefix.pop().replace(/_/g, backSlash + '_')
 
       prop += v.prop
         .replace(/-/g, '_')
