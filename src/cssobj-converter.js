@@ -1,4 +1,5 @@
 var postcss = require('postcss')
+var util = require('util')
 
 var src = 'h1{font-size:12px;color:blue;}\n@media(max-width: 800px){color:purple; p{color:red;}}'
 
@@ -10,8 +11,15 @@ function convertObj (src) {
   var store = {}
 
   var name = function (v) {
-    if (v.type == 'atrule') return '@' + v.name + v.params
-    if (v.type == 'rule') return v.selector
+
+    if (v.type == 'atrule') return util.format(
+      '@%s %s',
+      v.name,
+      v.params.replace(/\n/g, ' ')
+    )
+
+    if (v.type == 'rule') return v.selector.replace(/\n/g, ' ')
+
   }
 
   var getObj = function (v) {
@@ -41,13 +49,17 @@ function convertObj (src) {
     case 'decl':
       // put back IE hacks from v.raws
       var prop = ''
+      var value = v.value
 
       var prefix = v.raws.before.match(/[*_]+$/)
       if(prefix) prop = prefix.pop().replace(/_/g, '\\\\_')
 
-      prop += v.prop.replace(/-/g, '_')
+      prop += v.prop
+        .replace(/-/g, '_')
 
-      getObj(v)[prop] = v.value
+      if(Number(value)==value) value = Number(value)
+
+      getObj(v)[prop] = value
     }
   })
 
