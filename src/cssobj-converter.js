@@ -15,7 +15,11 @@ function camelCase (input) {
 var backSlash = util.inspect({'\\_':1}).length===12 ? '\\' : '\\\\'
 
 function convertObj (src) {
-  var ast = postcss().process(src).result.root
+  try{
+    var ast = postcss().process(src).result.root
+  }catch(e){
+    // console.log('parse error', e)
+  }
 
   var store = {}
 
