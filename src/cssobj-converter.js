@@ -5,6 +5,12 @@ var src = 'h1{font-size:12px;color:blue;}\n@media(max-width: 800px){color:purple
 
 var reOneRule = /^(?:charset|import|namespace)/
 
+function camelCase (input) {
+  return input.toLowerCase().replace(/-(.)/g, function (match, char) {
+    return char.toUpperCase()
+  })
+}
+
 // for old node(0.10), using \\ instead of \\\\
 var backSlash = util.inspect({'\\_':1}).length===12 ? '\\' : '\\\\'
 
@@ -54,11 +60,11 @@ function convertObj (src) {
       var prop = ''
       var value = v.value
 
+      // css hacks stored in v.raws.before
       var prefix = v.raws.before.match(/[*_]+$/)
-      if(prefix) prop = prefix.pop().replace(/_/g, backSlash + '_')
 
-      prop += v.prop
-        .replace(/-/g, '_')
+      if(prefix) prop += prefix.pop()
+      prop += camelCase(v.prop)
 
       if(Number(value)==value) value = Number(value)
 
