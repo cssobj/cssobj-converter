@@ -16,9 +16,10 @@ var backSlash = util.inspect({'\\_':1}).length===12 ? '\\' : '\\\\'
 
 function convertObj (src) {
   try{
-    var ast = postcss().process(src).result.root
+    // var ast = postcss().process(src).result.root
+    var ast = postcss.parse(src).toResult().root
   }catch(e){
-    // console.log('parse error', e)
+    console.log('parse error', e)
   }
 
   var store = {}
@@ -51,13 +52,17 @@ function convertObj (src) {
     switch (v.type) {
     case 'atrule':
       if(reOneRule.test(v.name)){
-        store['@'+v.name] = v.params
+        arrayKV(store, '@'+v.name, v.params)
         break
       }
     case 'rule':
-      var p = getObj(v)
+      var obj = getObj(v)
       var sel = name(v)
-      p[sel] = p[sel] || {}
+      if(sel in obj){
+        arrayKV(obj, sel, {})
+      } else {
+        obj[sel] = {}
+      }
       break
     case 'decl':
       // put back IE hacks from v.raws
@@ -72,12 +77,26 @@ function convertObj (src) {
 
       if(Number(value)==value) value = Number(value)
 
-      getObj(v)[prop] = value
+      var obj = getObj(v)
+      if(obj.constructor == Array) obj = obj[obj.length-1]
+      if(prop in obj) {
+        arrayKV(obj, prop, value)
+      }else{
+        obj[prop] = value
+      }
     }
   })
 
   return store
 }
+
+
+function arrayKV (obj, k, v, reverse, unique) {
+  obj[k] = k in obj ? [].concat(obj[k]) : []
+  if(unique && obj[k].indexOf(v)>-1) return
+  reverse ? obj[k].unshift(v) : obj[k].push(v)
+}
+
 
 module.exports = convertObj
 

@@ -30,8 +30,11 @@ var server = http.createServer((req, res) => {
       }
 
       var str = util.inspect(result, {depth:null})
-      str = esformatter.format('!' + str).slice(1)
-
+      try{
+        str = esformatter.format('!' + str).slice(1)
+      }catch(e){
+        console.log('esformatter error', e)
+      }
       // res.end(JSON.stringify(result, null, 2))
       res.end( str )
 
