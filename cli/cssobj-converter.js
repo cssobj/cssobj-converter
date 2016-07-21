@@ -13,6 +13,9 @@ var args = minimist(process.argv.slice(2), {
   'alias': {
     'p': 'pretty',
     'o': 'output'
+  },
+  'default': {
+    pretty: true
   }
 })
 
@@ -21,20 +24,20 @@ var file = args._.shift()
 try {
   var str = fs.readFileSync(file, 'utf8')
 } catch(e) {
-  console.log(e)
+  console.error(e)
   process.exit(1)
 }
 
 var code = util.inspect(convert(str), {depth: null})
 
 if (args.pretty) {
-  code = esformatter.format('!' + code).slice()
+  code = esformatter.format('!' + code).slice(1)
 }
 
 if (args.output) {
   fs.writeFileSync(args.output, code, 'utf8')
 } else {
-  console.log(code)
+  process.stdout.write(code)
 }
 
 
