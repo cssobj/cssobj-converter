@@ -32,7 +32,7 @@ function convertObj (src) {
       v.params.replace(/[\n\r]/g, ' ')
     )
 
-    if (v.type == 'rule') return v.selector.replace(/[\n\r]/g, ' ')
+    if (v.type == 'rule') return v.selector.replace(/[\n\r]/g, ' ').replace(/&/g, backSlash+'&')
 
   }
 

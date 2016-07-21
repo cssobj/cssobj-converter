@@ -7,10 +7,10 @@ var convert = require('../src/cssobj-converter.js')
 var minimist = require('minimist')
 
 var args = minimist(process.argv.slice(2), {
-  'boolean':[
+  'boolean': [
     'pretty'
   ],
-  'alias':{
+  'alias': {
     'p': 'pretty',
     'o': 'output'
   }
@@ -18,18 +18,20 @@ var args = minimist(process.argv.slice(2), {
 
 var file = args._.shift()
 
-try{
-  var str = fs.readFileSync(file,'utf8')
-}catch(e){
+try {
+  var str = fs.readFileSync(file, 'utf8')
+} catch(e) {
   console.log(e)
   process.exit(1)
 }
 
-var code = util.inspect(convert(str), {depth:null})
+var code = util.inspect(convert(str), {depth: null})
 
-if(args.pretty) code = esformatter.format('!'+code).slice(1)
+if (args.pretty) {
+  code = esformatter.format('!' + code).slice()
+}
 
-if(args.output){
+if (args.output) {
   fs.writeFileSync(args.output, code, 'utf8')
 } else {
   console.log(code)
