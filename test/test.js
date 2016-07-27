@@ -54,6 +54,9 @@ function testCli(testFile, option, targetFile, done) {
 }
 
 describe('Test cli converter', function () {
+  this.slow(3000)
+  this.timeout(5000)
+
   it('with pretty false', function (done) {
     testCli('test/cli/test.css', ['-p', false], 'test/cli/test.js', done)
   })
