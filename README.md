@@ -1,5 +1,7 @@
 # CSSOBJ Converter
 
+[![Build Status](https://travis-ci.org/cssobj/cssobj-converter.svg?branch=master)](https://travis-ci.org/cssobj/cssobj-converter)
+
 Convert from normal css to cssobj.
 
 The online version is below:
