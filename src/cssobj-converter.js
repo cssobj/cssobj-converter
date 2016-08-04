@@ -1,4 +1,6 @@
 var postcss = require('postcss')
+var scss = require('postcss-scss')
+var less = require('postcss-less')
 var util = require('util')
 
 var src = 'h1{font-size:12px;color:blue;}\n@media(max-width: 800px){color:purple; p{color:red;}}'
@@ -14,11 +16,17 @@ function camelCase (input) {
 // for old node(0.10), using \\ instead of \\\\
 var backSlash = util.inspect({'\\_':1}).length===12 ? '\\' : '\\\\'
 
-function convertObj (src) {
-  try{
-    // var ast = postcss().process(src).result.root
-    var ast = postcss.parse(src).toResult().root
-  }catch(e){
+var syntax = {
+  'scss': scss,
+  'less': less,
+  'css': ''
+}
+
+function convertObj (src, format) {
+  try {
+    var ast = postcss([]).process(src, { parser: syntax[format] }).result.root
+    // var ast = postcss.parse(src).toResult().root
+  }catch(e) {
     console.log('parse error', e)
   }
 

@@ -1,7 +1,7 @@
 var expect = require('chai').expect
 var convert = require('../src/cssobj-converter.js')
 var spawn = require('child_process').spawn
-var diff = require('diff')
+var path = require('path')
 var fs = require('fs')
 
 function formatResult (str) {
@@ -10,7 +10,8 @@ function formatResult (str) {
 
 function testCli(testFile, option, targetFile, done) {
   var cli = 'cli/cssobj-converter.js'
-  var cliProcess = spawn('node', [cli].concat(option).concat([testFile]))
+  var format = path.extname(testFile).slice(1).toLowerCase()
+  var cliProcess = spawn('node', [cli, '-f', format].concat(option).concat([testFile]))
   var srcFile = option[0]=='-o' && option[1]
 
   var output = '', msg=''
@@ -42,11 +43,7 @@ function testCli(testFile, option, targetFile, done) {
 
     var result = '', line=0
 
-    diff.diffLines(output, target).forEach(function(part) {
-      if(part.added) result += '[target added] below line ' + line + ':\n' + formatResult(part.value) + '\n'
-      if(part.removed) result += '[target removed] below line ' + line + ':\n' + formatResult(part.value) + '\n'
-      line+=part.count
-    })
+    expect(output).equal(target)
 
     done(result)
 

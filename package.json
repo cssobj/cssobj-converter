@@ -2,7 +2,7 @@
   "name": "cssobj-converter",
   "version": "1.0.0",
   "description": "Convert from css text into cssobj.",
-  "keywords":[
+  "keywords": [
     "cssobj",
     "cssobj converter",
     "convert css",
@@ -16,17 +16,25 @@
     "test": "mocha",
     "server": "node server/index"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cssobj/cssobj-converter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cssobj/cssobj-converter/issues"
+  },
+  "homepage": "https://github.com/cssobj/cssobj-converter#readme",
   "author": "James Yang <jamesyang999@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "esformatter": "^0.9.5",
     "minimist": "^1.2.0",
-    "postcss": "^5.0.21"
+    "postcss": "^5.0.21",
+    "postcss-less": "^0.14.0",
+    "postcss-scss": "^0.1.9"
   },
   "devDependencies": {
     "chai": "^3.5.0",
-    "diff": "^2.2.3",
-    "mocha": "^2.5.3",
-    "prettydiff": "^99.0.1"
+    "mocha": "^2.5.3"
   }
 }
