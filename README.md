@@ -6,7 +6,7 @@ Convert from normal css to cssobj.
 
 The online version is below:
 
-http://cssobjconverter-futurist.rhcloud.com
+http://convertcssobj-futurist.rhcloud.com/
 
 ( Currently using [OpenShift](https://www.openshift.com/) free hosting for nodejs backend, it will sleep for some idle time.
 
