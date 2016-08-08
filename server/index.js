@@ -23,7 +23,7 @@ var server = http.createServer((req, res) => {
       try {
         var json = JSON.parse(bodyString || '')
         debug(bodyString)
-        var result = convert(json.text)
+        var result = convert(json.text, json.format)
       } catch(e) {
         debug(e)
         return res.end('')
