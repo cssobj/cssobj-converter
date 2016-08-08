@@ -10,7 +10,7 @@
   ],
   "main": "./src/cssobj-converter.js",
   "bin": {
-    "cssobj-converter": "./cli/cssobj-converter.js"
+    "cssobjconv": "./cli/cssobj-converter.js"
   },
   "scripts": {
     "test": "mocha",

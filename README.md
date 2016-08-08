@@ -42,7 +42,7 @@ npm install -g cssobj-converter
 ### Usage
 
 ``` bash
-cssobj-converter [option] cssfile
+cssobjconv [option] cssfile
 ```
 
 ### Option
@@ -56,13 +56,13 @@ option | short | description
 
 ``` bash
 #convert abc.css into cssobj, output to stdout
-cssobj-converter abc.css
+cssobjconv abc.css
 
 #convert abc.css into cssobj, output to abc.js
-cssobj-converter abc.css -o abc.js
+cssobjconv abc.css -o abc.js
 
 #convert abc.css into cssobj, output to abc.js, without pretty format
-cssobj-converter abc.css -o abc.js -p false
+cssobjconv abc.css -o abc.js -p false
 
 ```
 
