@@ -1,6 +1,6 @@
 {
   "name": "cssobj-converter",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Convert from css text into cssobj.",
   "keywords": [
     "cssobj",

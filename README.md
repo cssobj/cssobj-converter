@@ -51,6 +51,8 @@ option | short | description
 ---|---|---
 --output | -o | output file name(.js file)
 --pretty | -p | pretty format output js object
+--css | -c | css code from command line
+--format | -f | supported: css,scss,less
 
 ### Example
 
