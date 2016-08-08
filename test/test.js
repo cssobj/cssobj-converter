@@ -80,7 +80,7 @@ describe('Test cli converter', function () {
 
   it('format with -c', function(done) {
     // with explicitly -f less option
-    testCli('', ['-c', 'p{color: red;}'], 'test/cli/command-line.css', done)
+    testCli('', ['-c', 'p{color: red;}'], 'test/cli/command-line.js', done)
 
   })
 

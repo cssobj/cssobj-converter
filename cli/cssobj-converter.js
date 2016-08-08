@@ -41,9 +41,9 @@ if (args.pretty) {
 }
 
 if (args.output) {
-  fs.writeFileSync(args.output, code, 'utf8')
+  fs.writeFileSync(args.output, code+'\n', 'utf8')
 } else {
-  process.stdout.write(code)
+  console.log(code)
 }
 
 
