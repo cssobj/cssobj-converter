@@ -10,8 +10,8 @@ function formatResult (str) {
 
 function testCli(testFile, option, targetFile, done) {
   var cli = 'cli/cssobj-converter.js'
-  var format = path.extname(testFile).slice(1).toLowerCase()
-  var cliProcess = spawn('node', [cli, '-f', format].concat(option).concat([testFile]))
+  // var format = path.extname(testFile).slice(1).toLowerCase()
+  var cliProcess = spawn('node', [cli].concat(option).concat([testFile]))
   var srcFile = option[0]=='-o' && option[1]
 
   var output = '', msg=''
@@ -64,6 +64,24 @@ describe('Test cli converter', function () {
 
   it('with output file', function(done) {
     testCli('test/cli/test.css', ['-o', 'cli-temp.js'], 'test/cli/test-pretty.js', done)
+  })
+
+  it('format less no -f', function(done) {
+    // without -f option
+    testCli('test/cli/test.less', [], 'test/cli/test-less.js', done)
+
+  })
+
+  it('format less with -f', function(done) {
+    // with explicitly -f less option
+    testCli('test/cli/test.less', ['-f', 'less'], 'test/cli/test-less.js', done)
+
+  })
+
+  it('format with -c', function(done) {
+    // with explicitly -f less option
+    testCli('', ['-c', 'p{color: red;}'], 'test/cli/command-line.css', done)
+
   })
 
   it('with output file and no pretty', function(done) {

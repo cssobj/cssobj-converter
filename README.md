@@ -64,6 +64,13 @@ cssobjconv abc.css -o abc.js
 #convert abc.css into cssobj, output to abc.js, without pretty format
 cssobjconv abc.css -o abc.js -p false
 
+#convert less
+cssobjconv abc.less -f less -o abc.js
+cssobjconv abc.less -o abc.js  #same as above
+
+#convert css in command line
+cssobjconv -c "p{ color:red; }"
+
 ```
 
 
