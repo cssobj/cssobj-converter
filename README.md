@@ -52,7 +52,9 @@ option | short | description
 --output | -o | output file name(.js file)
 --pretty | -p | pretty format output js object
 --css | -c | css code from command line
---format | -f | supported: css,scss,less
+--format | -f | supported: css,less
+--dir | -d | recursive convert all [css/less] files in [dir]
+--watch | -w | watch [dir] for changes
 
 ### Example
 
@@ -72,6 +74,12 @@ cssobjconv abc.less -o abc.js  #same as above
 
 #convert css in command line
 cssobjconv -c "p{ color:red; }"
+
+# all files convert to .js
+cssobjconv -d ./abc
+
+# convert all files and watch
+cssobjconv -w -d ./abc
 
 ```
 
