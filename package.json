@@ -27,8 +27,10 @@
   "author": "James Yang <jamesyang999@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "dive": "^0.5.0",
     "esformatter": "^0.9.5",
     "minimist": "^1.2.0",
+    "node-watch": "^0.4.0",
     "postcss": "^5.0.21",
     "postcss-less": "^0.14.0",
     "postcss-scss": "^0.1.9"

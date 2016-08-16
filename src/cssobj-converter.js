@@ -35,14 +35,14 @@ function camelCase (input) {
 }
 
 function parseMixin(sel) {
-  var match = sel.match(/^\s*([\.\#a-z0-9\&_-]+)\s*\((.*)\)\s*$/i)
+  var match = sel && sel.match(/^\s*([\.\#a-z0-9\&_-]+)\s*\((.*)\)\s*$/i)
   if(match) {
     return [match[1], match[2].split(/\s*;\s*/g)]
   }
 }
 
 function parseExtend(sel) {
-  var match = sel.match(/^\s*([^@]+)\s*:extend\((.*)\)\s*$/i)
+  var match = sel && sel.match(/^\s*([^@]+)\s*:extend\((.*)\)\s*$/i)
   if(match){
     return [match[1], match[2]]
   }
@@ -124,7 +124,7 @@ function convertObj (src, format) {
             sel = arrExt[0]
             body.$extend = arrExt[1]||''
           }
-        } else {
+        } else if (arrMix) {
           sel = '$mixin'
           body[arrMix[0]] = arrMix[1].map(function(value) {
             return Number(value)==value ? Number(value) : value
@@ -164,7 +164,7 @@ function convertObj (src, format) {
       var obj = getObj(v)
       if(obj && obj.constructor == Array) obj = obj[obj.length-1]
 
-      if(prop[0]=='@') {
+      if(prop[0]=='@' && !prop[0].match(/^\s*@(import|namespace|charset)\b/)) {
         obj['$vars'] = obj['$vars'] || {}
         obj['$vars'][prop.slice(1)] = value
         return

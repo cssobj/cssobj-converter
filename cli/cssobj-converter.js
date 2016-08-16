@@ -6,45 +6,97 @@ var esformatter = require('esformatter')
 var convert = require('../src/cssobj-converter.js')
 var minimist = require('minimist')
 var path = require('path')
+var dive = require('dive')
+var watch = require('node-watch')
 
 var args = minimist(process.argv.slice(2), {
   'boolean': [
-    'pretty'
+    'pretty',
+    'watch'
   ],
   'alias': {
     'p': 'pretty',
     'o': 'output',
     'f': 'format',
-    'c': 'css'
+    'c': 'css',
+    'd': 'dir',
+    'w': 'watch'
   },
   'default': {
-    pretty: true
+    pretty: true,
+    watch: false
   }
 })
 
 var file = args._.shift()
-var format = args.format || file && path.extname(file).slice(1).toLowerCase()
+var dir = args.dir
+var format = args.format
+var str = args.css
 
-try {
-  var str = args.css || fs.readFileSync(file, 'utf8')
-} catch(e) {
-  console.log(fs.readFileSync(path.join(__dirname, 'usage.md'), 'utf8'))
-  // console.error(e)
-  process.exit(1)
+if(str){
+  output(convertFile(null, str, format))
 }
 
-
-var code = util.inspect(convert(str, format), {depth: null})
-
-if (args.pretty) {
-  code = esformatter.format('!' + code).slice(1)
+if(file) {
+  var code = convertFile(file, str, format || file && path.extname(file).slice(1).toLowerCase() )
+  output(code)
 }
 
-if (args.output) {
-  fs.writeFileSync(args.output, code+'\n', 'utf8')
-} else {
-  console.log(code)
+if(dir) {
+  dive(dir, {files:true}, function (err, file, stat) {
+    processFile(file)
+  })
 }
 
+if(args.watch) {
+  if(!dir) console.log('--watch must used with --dir'), process.exit(0)
+  watch(dir, function(file) {
+    console.log(file, 'changed')
+    processFile(file)
+  })
+  console.log('watching', dir)
+}
 
+function processFile(file) {
+  var match = file.match(/\.(css|less)$/i)
+  if(!match) return
+  var format = match.pop().toLowerCase()
+  fs.readFile(file, function (err, str) {
+    if(err) {
+      console.log(err)
+      return
+    }
+    var code = convertFile(null, str, format)
+    fs.writeFileSync(file + '.js', code+'\n', 'utf8')
+  })
+}
 
+function output(code) {
+  if (args.output) {
+    fs.writeFileSync(args.output, code+'\n', 'utf8')
+  } else {
+    console.log(code)
+  }
+}
+
+function convertFile(file, str, format) {
+  if(!str && file) {
+    try {
+      str = fs.readFileSync(file, 'utf8')
+    } catch(e) {
+      console.log(fs.readFileSync(path.join(__dirname, 'usage.md'), 'utf8'))
+      // console.error(e)
+      process.exit(1)
+    }
+  }
+
+  var code = util.inspect(convert(str, format), {depth: null})
+
+  if (args.pretty) {
+    try{
+      code = esformatter.format('!' + code).slice(1)
+    }catch(e){}
+  }
+
+  return code
+}
