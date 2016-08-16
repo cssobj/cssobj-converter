@@ -126,6 +126,9 @@ function convertObj (src, format) {
             return Number(value)==value ? Number(value) : value
           })
         }
+      } else if(parseMixin(sel)) {
+        // fix $vars order poblem
+        body.$vars = {}
       }
       if(sel in obj){
         arrayKV(obj, sel, body)
@@ -159,7 +162,7 @@ function convertObj (src, format) {
 
       if(prop in obj) {
         arrayKV(obj, prop, value)
-      }else{
+      } else {
         obj[prop] = value
       }
     }

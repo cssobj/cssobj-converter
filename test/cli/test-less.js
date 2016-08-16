@@ -18,12 +18,12 @@
   },
   '$mixins': {
     '.mix': {
-      color: '@a',
-      margin: '@b',
       '$vars': {
         '@a': '',
         '@b': ''
-      }
+      },
+      color: '@a',
+      margin: '@b'
     }
   }
 }
