@@ -12,7 +12,9 @@
 
     /* Headings for larger alerts
     block comment*/
-    h4 {
+    // here back extend to h3
+    // but lessobj don't support back reference
+    h4:extend(h3) {
         margin-top: 0; // inline comment here
         color: inherit;
         .mix(#fff; 10px);

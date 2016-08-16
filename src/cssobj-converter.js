@@ -104,31 +104,41 @@ function convertObj (src, format) {
         break
       }
     case 'rule':
+      if(format=='less'){
+        var arrExt = parseExtend(v.selector)
+        var arrMix = parseMixin(v.selector)
+        if(arrExt) v.selector = arrExt[0]
+      }
       var obj = getObj(v)
       var sel = name(v)
       var body = {}
-      var arr = parseExtend(sel) || parseMixin(sel)
       // it's LESS :extend / mixin
-      if(v.ruleWithoutBody && arr) {
+      if(v.ruleWithoutBody) {
         // console.log(sel, parseExtend(sel), parseMixin(sel))
         if(v.extendRule) {
           // combine & selector into parent
-          if(arr[0]=='&') {
+          if(arrExt[0]=='&') {
             sel = '$extend'
-            body = arr[1]||''
+            body = arrExt[1]||''
           } else {
-            sel = arr[0]
-            body.$extend = arr[1]||''
+            sel = arrExt[0]
+            body.$extend = arrExt[1]||''
           }
         } else {
           sel = '$mixin'
-          body[arr[0]] = arr[1].map(function(value) {
+          body[arrMix[0]] = arrMix[1].map(function(value) {
             return Number(value)==value ? Number(value) : value
           })
         }
-      } else if(parseMixin(sel)) {
-        // fix $vars order poblem
-        body.$vars = {}
+      } else {
+        // mixin & extend in selector with prop
+        if(arrMix) {
+          // fix $vars order poblem
+          body.$vars = {}
+        }
+        if(arrExt) {
+          body.$extend = arrExt[1]||''
+        }
       }
       if(sel in obj){
         arrayKV(obj, sel, body)

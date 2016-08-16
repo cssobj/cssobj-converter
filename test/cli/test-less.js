@@ -5,6 +5,7 @@
   '.alert': {
     padding: '@alert-padding',
     h4: {
+      '$extend': 'h3',
       marginTop: 0,
       color: 'inherit',
       '$mixin': {
