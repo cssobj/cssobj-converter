@@ -36,8 +36,8 @@ function camelCase (input) {
 
 function parseMixin(sel) {
   var match = sel.match(/^\s*([\.\#a-z0-9\&_-]+)\s*\((.*)\)\s*$/i)
-  if(match){
-    return [match[1], match[2].split(/\s*,\s*/g)]
+  if(match) {
+    return [match[1], match[2].split(/\s*;\s*/g)]
   }
 }
 
@@ -107,17 +107,22 @@ function convertObj (src, format) {
       var obj = getObj(v)
       var sel = name(v)
       var body = {}
+      var arr = parseExtend(sel) || parseMixin(sel)
       // it's LESS :extend / mixin
-      if(v.ruleWithoutBody) {
-        console.log(sel, parseExtend(sel), parseMixin(sel))
-        if(v.extendRule){
-          var arr = parseExtend(sel)
-          sel = arr[0]
-          body.$extend = arr[1]||''
+      if(v.ruleWithoutBody && arr) {
+        // console.log(sel, parseExtend(sel), parseMixin(sel))
+        if(v.extendRule) {
+          // combine & selector into parent
+          if(arr[0]=='&') {
+            sel = '$extend'
+            body = arr[1]||''
+          } else {
+            sel = arr[0]
+            body.$extend = arr[1]||''
+          }
         } else {
-          var arr = parseMixin(sel)
           sel = '$mixin'
-          body[arr[0]] = arr[1].map(function(v) {
+          body[arr[0]] = arr[1].map(function(value) {
             return Number(value)==value ? Number(value) : value
           })
         }
@@ -144,7 +149,7 @@ function convertObj (src, format) {
       if(Number(value)==value) value = Number(value)
 
       var obj = getObj(v)
-      if(obj.constructor == Array) obj = obj[obj.length-1]
+      if(obj && obj.constructor == Array) obj = obj[obj.length-1]
 
       if(prop[0]=='@') {
         obj['$vars'] = obj['$vars'] || {}
@@ -177,7 +182,7 @@ function transformMixin(obj) {
       delete obj[k]
     }
   }
-  obj.$mixins = $mixins
+  if(Object.keys($mixins).length) obj.$mixins = $mixins
   return obj
 }
 

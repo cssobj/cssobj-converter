@@ -1,6 +1,11 @@
 
 @alert-padding: 12px;
 
+.mix (@a; @b) {
+    color: @a;
+    margin: @b;
+}
+
 // less files
 .alert {
     padding: @alert-padding;
@@ -10,5 +15,11 @@
     h4 {
         margin-top: 0; // inline comment here
         color: inherit;
+        .mix(#fff; 10px);
     }
+}
+
+h3 {
+    &:extend(.alert h4);
+    font-size: 12px;
 }
