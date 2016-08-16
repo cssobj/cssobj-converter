@@ -34,6 +34,20 @@ function camelCase (input) {
   })
 }
 
+function parseMixin(sel) {
+  var match = sel.match(/^\s*([\.\#a-z0-9\&_-]+)\s*\((.*)\)\s*$/i)
+  if(match){
+    return [match[1], match[2].split(/\s*,\s*/g)]
+  }
+}
+
+function parseExtend(sel) {
+  var match = sel.match(/^\s*([^@]+)\s*:extend\((.*)\)\s*$/i)
+  if(match){
+    return [match[1], match[2]]
+  }
+}
+
 var syntax = {
   'scss': scss,
   'less': less,
@@ -92,18 +106,26 @@ function convertObj (src, format) {
     case 'rule':
       var obj = getObj(v)
       var sel = name(v)
+      var body = {}
       // it's LESS :extend / mixin
       if(v.ruleWithoutBody) {
+        console.log(sel, parseExtend(sel), parseMixin(sel))
         if(v.extendRule){
-          sel+='1234'
+          var arr = parseExtend(sel)
+          sel = arr[0]
+          body.$extend = arr[1]||''
         } else {
-          sel+='abcd'
+          var arr = parseMixin(sel)
+          sel = '$mixin'
+          body[arr[0]] = arr[1].map(function(v) {
+            return Number(value)==value ? Number(value) : value
+          })
         }
       }
       if(sel in obj){
-        arrayKV(obj, sel, {})
+        arrayKV(obj, sel, body)
       } else {
-        obj[sel] = {}
+        obj[sel] = body
       }
       break
     case 'decl':
@@ -126,7 +148,7 @@ function convertObj (src, format) {
 
       if(prop[0]=='@') {
         obj['$vars'] = obj['$vars'] || {}
-        obj['$vars'][prop] = value
+        obj['$vars'][prop.slice(1)] = value
         return
       }
 
@@ -138,7 +160,25 @@ function convertObj (src, format) {
     }
   })
 
-  return store
+  return transformMixin(store)
+}
+
+function transformMixin(obj) {
+  var $mixins = {}
+  for(var k in obj) {
+    var arr = parseMixin(k)
+    if(arr) {
+      obj[k].$vars = obj[k].$vars || {}
+      arr[1].forEach(function(v) {
+        v = v.split('=')
+        obj[k].$vars[v[0]] = v[1]||''
+      })
+      $mixins[arr[0]] = obj[k]
+      delete obj[k]
+    }
+  }
+  obj.$mixins = $mixins
+  return obj
 }
 
 
