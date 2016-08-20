@@ -192,7 +192,7 @@ function transformMixin(obj) {
       obj[k].$vars = obj[k].$vars || {}
       arr[1].forEach(function(v) {
         v = v.split(/[:=]/)
-        obj[k].$vars[v[0]] = v[1]||''
+        obj[k].$vars[v[0].replace(/^\s*@/,'')] = (v[1]||'').trim()
       })
       $mixins[arr[0]] = obj[k]
       delete obj[k]
