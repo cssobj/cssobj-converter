@@ -20,8 +20,8 @@
   '$mixins': {
     '.mix': {
       '$vars': {
-        '@a': '',
-        '@b': ''
+        a: '',
+        b: ''
       },
       color: '@a',
       margin: '@b'
