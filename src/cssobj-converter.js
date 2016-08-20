@@ -55,14 +55,17 @@ var syntax = {
 }
 
 function convertObj (src, format) {
+  var store = {}
+
   try {
     var ast = postcss([]).process(src, { parser: syntax[format] }).result.root
     // var ast = postcss.parse(src).toResult().root
   }catch(e) {
     console.log('parse error', e)
+    return e
   }
 
-  var store = {}
+  if(!ast) return {}
 
   var name = function (v) {
 
