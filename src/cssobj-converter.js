@@ -37,7 +37,7 @@ function camelCase (input) {
 function parseMixin(sel) {
   var match = sel && sel.match(/^\s*([\.\#a-z0-9\&_-]+)\s*\((.*)\)\s*$/i)
   if(match) {
-    return [match[1], match[2].split(/\s*;\s*/g)]
+    return [match[1], match[2].split(/\s*[;,]\s*/g)]
   }
 }
 
@@ -191,7 +191,7 @@ function transformMixin(obj) {
     if(arr) {
       obj[k].$vars = obj[k].$vars || {}
       arr[1].forEach(function(v) {
-        v = v.split('=')
+        v = v.split(/[:=]/)
         obj[k].$vars[v[0]] = v[1]||''
       })
       $mixins[arr[0]] = obj[k]
