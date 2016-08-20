@@ -3,12 +3,14 @@
 
   Options:
 
-    --output, -o  output filename(.js file)
-    --pretty, -p  pretty format output js object
-    --css, -c     css code from command line
-    --format, -f  supported: css,scss,less
-    --dir, -d     recursive convert all [css/less] files in [dir]
-    --watch, -w   watch [dir] for changes
+    --help, -h     show help message
+    --version, -v  show version number
+    --output, -o   output filename(.js file)
+    --pretty, -p   pretty format output js object
+    --css, -c      css code from command line
+    --format, -f   supported: css,scss,less
+    --dir, -d      recursive convert all [css/less] files in [dir]
+    --watch, -w    watch [dir] for changes
 
   Examples:
 
@@ -20,6 +22,3 @@
     cssobjconv -c "p{ color:red; }"
     cssobjconv -d ./abc  # all files convert to .js
     cssobjconv -w -d ./abc # convert all files and watch
-
-
-

@@ -8,13 +8,17 @@ var minimist = require('minimist')
 var path = require('path')
 var dive = require('dive')
 var watch = require('node-watch')
+var pkg = require('../package.json')
 
-var args = minimist(process.argv.slice(2), {
+var argv = process.argv.slice(2)
+var args = minimist(argv, {
   'boolean': [
     'pretty',
     'watch'
   ],
   'alias': {
+    'v': 'version',
+    'h': 'help',
     'p': 'pretty',
     'o': 'output',
     'f': 'format',
@@ -27,6 +31,16 @@ var args = minimist(process.argv.slice(2), {
     watch: false
   }
 })
+
+if(args.help || argv.length==0) {
+  console.log(fs.readFileSync(path.join(__dirname, 'usage.md'), 'utf8'))
+  process.exit(0)
+}
+
+if(args.version) {
+  console.log(pkg.version)
+  process.exit(0)
+}
 
 var file = args._.shift()
 var dir = args.dir
@@ -84,8 +98,7 @@ function convertFile(file, str, format) {
     try {
       str = fs.readFileSync(file, 'utf8')
     } catch(e) {
-      console.log(fs.readFileSync(path.join(__dirname, 'usage.md'), 'utf8'))
-      // console.error(e)
+      console.error(e)
       process.exit(1)
     }
   }
