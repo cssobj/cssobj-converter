@@ -29,6 +29,8 @@ function replacer (match, offset, str) {
 
 
 function camelCase (input) {
+  // make -ms-prop result in msProp
+  if(input.indexOf('-ms-')===0) input = input.slice(1)
   return input.toLowerCase().replace(/-(.)/g, function (match, char) {
     return char.toUpperCase()
   })
@@ -154,18 +156,26 @@ function convertObj (src, format) {
       var prop = ''
       var value = v.value
 
+      var obj = getObj(v)
+      if(obj && obj.constructor == Array) obj = obj[obj.length-1]
+
       // css hacks stored in v.raws.before
       var prefix = v.raws.before.match(/[*_]+$/)
 
       if(prefix) prop += prefix.pop()
 
-      // @prop don't camelcase
-      prop += /^\s*@/i.test(v.prop) ? v.prop : camelCase(v.prop)
-
       if(Number(value)==value) value = Number(value)
 
-      var obj = getObj(v)
-      if(obj && obj.constructor == Array) obj = obj[obj.length-1]
+      // remove prefix prop version from result
+      !['-webkit-', '-moz-', 'ms-', '-o-'].forEach(function(vendor) {
+        var p = camelCase(vendor + v.prop)
+        if(p in obj && value==obj[p]) {
+          delete obj[p]
+        }
+      })
+
+      // @prop don't camelcase
+      prop += /^\s*@/i.test(v.prop) ? v.prop : camelCase(v.prop)
 
       if(prop[0]=='@' && !prop[0].match(/^\s*@(import|namespace|charset)\b/)) {
         obj['$vars'] = obj['$vars'] || {}
