@@ -1,24 +1,25 @@
 
-  Usage: cssobjconv [options] input.css
+  Usage: cssobj [options] input.css
 
   Options:
 
-    --help, -h     show help message
-    --version, -v  show version number
-    --output, -o   output filename(.js file)
-    --pretty, -p   pretty format output js object
-    --css, -c      css code from command line
-    --format, -f   supported: css,scss,less
-    --dir, -d      recursive convert all [css/less] files in [dir]
-    --watch, -w    watch [dir] for changes
+    --help, -h       show help message
+    --version, -v    show version number
+    --output, -o     output filename(.js file)
+    --pretty, -p     pretty format output js object
+    --css, -c        css code from command line
+    --format, -f     supported: css,scss,less
+    --watch, -w      watch [dir] for changes
+    --recursive, -r  recursively convert/watch for [dir]
 
   Examples:
 
-    cssobjconv abc.css
-    cssobjconv abc.css -o abc.js
-    cssobjconv abc.css -o abc.js -p false
-    cssobjconv abc.less -f less -o abc.js
-    cssobjconv abc.less -o abc.js  # same as above
-    cssobjconv -c "p{ color:red; }"
-    cssobjconv -d ./abc  # all files convert to .js
-    cssobjconv -w -d ./abc # convert all files and watch
+    cssobj abc.css
+    cssobj abc.css -w # watch abc.css and output
+    cssobj abc.css -o abc.js
+    cssobj abc.css -o abc.js -p false -w
+    cssobj abc.less -f less -o abc.js
+    cssobj abc.less -o abc.js   # same as above
+    cssobj -c "p{ color:red; }"
+    cssobj ./abc      # all files convert to .js
+    cssobj ./abc -w   # convert all files and watch
