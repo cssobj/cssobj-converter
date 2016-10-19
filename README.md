@@ -42,7 +42,7 @@ npm install -g cssobj-converter
 ### Usage
 
 ``` bash
-cssobjconv [option] cssfile
+cssobj [option] cssfile
 ```
 
 ### Option
@@ -50,36 +50,36 @@ cssobjconv [option] cssfile
 option | short | description
 ---|---|---
 --output | -o | output file name(.js file)
---pretty | -p | pretty format output js object
+--pretty | -p | pretty format output js object **default: true**
 --css | -c | css code from command line
---format | -f | supported: css,less
---dir | -d | recursive convert all [css/less] files in [dir]
---watch | -w | watch [dir] for changes
+--format | -f | supported: css,less **default: css**
+--watch | -w | watch [dir] for changes **default: false**
+--recursive | -r | recursive convert all [css/less] files in [dir]; **default: false**
 
 ### Example
 
 ``` bash
 #convert abc.css into cssobj, output to stdout
-cssobjconv abc.css
+cssobj abc.css
 
 #convert abc.css into cssobj, output to abc.js
-cssobjconv abc.css -o abc.js
+cssobj abc.css -o abc.js
 
 #convert abc.css into cssobj, output to abc.js, without pretty format
-cssobjconv abc.css -o abc.js -p false
+cssobj abc.css -o abc.js -p false
 
 #convert less
-cssobjconv abc.less -f less -o abc.js
-cssobjconv abc.less -o abc.js  #same as above
+cssobj abc.less -f less -o abc.js
+cssobj abc.less -o abc.js  #same as above
 
 #convert css in command line
-cssobjconv -c "p{ color:red; }"
+cssobj -c "p{ color:red; }"
 
-# all files convert to .js
-cssobjconv -d ./abc
+# all files in folder convert to .js
+cssobj ./abc
 
-# convert all files and watch
-cssobjconv -w -d ./abc
+# convert all files in folder and watch
+cssobj ./abc -w
 
 ```
 

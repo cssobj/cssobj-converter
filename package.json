@@ -1,6 +1,6 @@
 {
   "name": "cssobj-converter",
-  "version": "1.0.10",
+  "version": "2.0.0",
   "description": "Convert from css text into cssobj.",
   "keywords": [
     "cssobj",
@@ -10,7 +10,7 @@
   ],
   "main": "./src/cssobj-converter.js",
   "bin": {
-    "cssobjconv": "./cli/cssobj-converter.js"
+    "cssobj": "./cli/cssobj-converter.js"
   },
   "scripts": {
     "test": "mocha",

@@ -14,7 +14,8 @@ var argv = process.argv.slice(2)
 var args = minimist(argv, {
   'boolean': [
     'pretty',
-    'watch'
+    'watch',
+    'recursive'
   ],
   'alias': {
     'v': 'version',
@@ -23,12 +24,13 @@ var args = minimist(argv, {
     'o': 'output',
     'f': 'format',
     'c': 'css',
-    'd': 'dir',
-    'w': 'watch'
+    'w': 'watch',
+    'r': 'recursive'
   },
   'default': {
     pretty: true,
-    watch: false
+    watch: false,
+    recursive: false
   }
 })
 
@@ -42,33 +44,43 @@ if(args.version) {
   process.exit(0)
 }
 
-var file = args._.shift()
-var dir = args.dir
+var isDir = false
+var source = args._.shift()
+
 var format = args.format
 var str = args.css
 
-if(str){
+if (str) {
   output(convertFile(null, str, format))
+} else if (source) {
+  try {
+    var sourceStat = fs.lstatSync(source)
+    isDir = sourceStat.isDirectory()
+  }catch(e) {
+    console.log('invalid file/folder')
+    process.exit(1)
+  }
+  if (isDir) {
+    dive(source, {recursive: args.recursive, files: true, directories: false}, function (err, file, stat) {
+      processFile(file)
+    })
+  } else {
+    directFile()
+  }
+
+  if(args.watch) {
+    // if(!dir) console.log('--watch must used with --dir'), process.exit(0)
+    watch(source, {recursive: args.recursive}, function(file) {
+      console.log(file, 'changed')
+      isDir ? processFile(file) : directFile()
+    })
+    console.log('watching', source)
+  }
 }
 
-if(file) {
-  var code = convertFile(file, str, format || file && path.extname(file).slice(1).toLowerCase() )
+function directFile() {
+  var code = convertFile(source, str, format || source && path.extname(source).slice(1).toLowerCase())
   output(code)
-}
-
-if(dir) {
-  dive(dir, {files:true}, function (err, file, stat) {
-    processFile(file)
-  })
-}
-
-if(args.watch) {
-  if(!dir) console.log('--watch must used with --dir'), process.exit(0)
-  watch(dir, function(file) {
-    console.log(file, 'changed')
-    processFile(file)
-  })
-  console.log('watching', dir)
 }
 
 function processFile(file) {
