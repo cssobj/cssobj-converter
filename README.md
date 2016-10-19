@@ -1,6 +1,6 @@
 # CSSOBJ Converter
 
-[![Build Status](https://travis-ci.org/cssobj/cssobj-converter.svg?branch=master)](https://travis-ci.org/cssobj/cssobj-converter)
+[![Join the chat at https://gitter.im/css-in-js/cssobj](https://badges.gitter.im/css-in-js/cssobj.svg)](https://gitter.im/css-in-js/cssobj) [![Build Status](https://travis-ci.org/cssobj/cssobj-converter.svg?branch=master)](https://travis-ci.org/cssobj/cssobj-converter)
 
 Convert from normal css to cssobj.
 
