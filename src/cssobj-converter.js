@@ -109,11 +109,19 @@ function convertObj (src, format) {
       if(reOneRule.test(v.name)) {
         arrayKV(obj, '@'+v.name, v.params)
       } else {
-        var key = name(v)
-        var body = reGroupRule.test(v.name) ? [] : {}
-        if (Array.isArray(obj)) obj.push({[key]: body})
-        else if(!(key in obj)) obj[key] = body
-        else body = obj[key]
+        var sel = name(v)
+        var body = {}
+
+        if(Array.isArray(obj)){
+          obj.push({[sel]: body})
+        } else if (sel in obj) {
+          arrayKV(obj, sel, body)
+        } else {
+          obj[sel] = body
+        }
+        // if (Array.isArray(obj)) obj.push({[key]: body})
+        // else if(!(key in obj)) obj[key] = body
+        // else body = obj[key]
         v.obj = body
       }
       break
