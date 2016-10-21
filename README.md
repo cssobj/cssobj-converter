@@ -14,23 +14,6 @@ If you cannot open the page, try again after few seconds, it will wake up.
 
 Someone can help with this? Or provide a node js hosting? )
 
-## Server
-
-Clone this repo, and run:
-
-``` bash
-npm install
-npm server
-```
-
-Service URL: `http://localhost:8080`
-
-Accept `POST` json data as below:
-
-``` bash
-curl -d '{ "text" : "p {color:red;}" }' localhost:8080
-```
-
 ## CLI
 
 ### Install
@@ -55,6 +38,7 @@ option | short | description
 --format | -f | supported: css,less **default: css**
 --watch | -w | watch [dir] for changes **default: false**
 --recursive | -r | recursive convert all [css/less] files in [dir]; **default: false**
+--keepVendor | -k | keep vendor prefix for css props
 
 ### Example
 
@@ -83,7 +67,6 @@ cssobj ./abc -w
 
 ```
 
-
 ## NodeJS
 
 ### Install
@@ -97,5 +80,22 @@ npm install -S cssobj-converter
 ``` javascript
 var converter = require('cssobj-converter')
 console.log( converter('p { color: red; }') )
+```
+
+## Server
+
+Clone this repo, and run:
+
+``` bash
+npm install
+npm server
+```
+
+Service URL: `http://localhost:8080`
+
+Accept `POST` json data as below:
+
+``` bash
+curl -d '{ "text" : "p {color:red;}" }' localhost:8080
 ```
 

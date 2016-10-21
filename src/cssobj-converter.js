@@ -50,13 +50,20 @@ function parseExtend(sel) {
   }
 }
 
+function joinLines(str) {
+  return str.split(/[\n\r]/).map(function(s) {
+    return s.trim()
+  }).join(' ')
+}
+
 var syntax = {
   'scss': scss,
   'less': less,
   'css': ''
 }
 
-function convertObj (src, format) {
+function convertObj (src, format, option) {
+  option = option||{}
   var store = {}
   var curObj = null
 
@@ -75,10 +82,10 @@ function convertObj (src, format) {
     if (v.type == 'atrule') return util.format(
       '@%s %s',
       v.name,
-      v.params.replace(/[\n\r]/g, ' ')
+      joinLines(v.params)
     )
 
-    if (v.type == 'rule') return v.selector.replace(/[\n\r]/g, ' ').replace( /&/g,
+    if (v.type == 'rule') return joinLines(v.selector).replace( /&/g,
       // how to deal with & ?
       // stylus using \& to escape, SCSS/LESS check insideStr
       format==='less'
@@ -173,7 +180,8 @@ function convertObj (src, format) {
     case 'decl':
       // put back IE hacks from v.raws
       var prop = ''
-      var value = v.value
+      var important = v.important ? ' !important' : ''
+      var value = v.value + important
 
       if(!obj) return
       // if(obj && obj.constructor == Array) obj = obj[obj.length-1]
@@ -186,12 +194,15 @@ function convertObj (src, format) {
       if(Number(value)==value) value = Number(value)
 
       // remove prefix prop version from result
-      !['-webkit-', '-moz-', 'ms-', '-o-'].forEach(function(vendor) {
-        var p = camelCase(vendor + v.prop)
-        if(p in obj && value==obj[p]) {
-          delete obj[p]
-        }
-      })
+      if(!option.keepVendor) {
+        !['-webkit-', '-moz-', 'ms-', '-o-'].forEach(function(vendor) {
+          var p = camelCase(vendor + v.prop)
+          if(p in obj && value==obj[p]) {
+            delete obj[p]
+          }
+        })
+      }
+
 
       // @prop don't camelcase
       prop += /^\s*@/i.test(v.prop) ? v.prop : camelCase(v.prop)

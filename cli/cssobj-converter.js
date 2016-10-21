@@ -15,6 +15,7 @@ var args = minimist(argv, {
   'boolean': [
     'pretty',
     'watch',
+    'keepVendor',
     'recursive'
   ],
   'alias': {
@@ -23,6 +24,7 @@ var args = minimist(argv, {
     'p': 'pretty',
     'o': 'output',
     'f': 'format',
+    'k': 'keepVendor',
     'c': 'css',
     'w': 'watch',
     'r': 'recursive'
@@ -30,6 +32,7 @@ var args = minimist(argv, {
   'default': {
     pretty: true,
     watch: false,
+    keepVendor: false,
     recursive: false
   }
 })
@@ -115,7 +118,7 @@ function convertFile(file, str, format) {
     }
   }
 
-  var code = util.inspect(convert(str, format), {depth: null})
+  var code = util.inspect(convert(str, format, {keepVendor: args.keepVendor}), {depth: null})
 
   if (args.pretty) {
     try{

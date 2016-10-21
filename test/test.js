@@ -4,6 +4,21 @@ var spawn = require('child_process').spawn
 var path = require('path')
 var fs = require('fs')
 
+var minifySelectors = require('postcss-minify-selectors')
+var minifyParams = require('postcss-minify-params')
+var perfectionist = require('perfectionist')
+var postcssSorting = require('postcss-sort-style-rules')
+var postcss = require('postcss')([minifySelectors(), minifyParams(), perfectionist({format:''}), postcssSorting()])
+
+function normalize(s) { return postcss.process(s).css }
+
+var a= fs.readFileSync('test/bootstrap/css/_bootstrap.css')
+var b = fs.readFileSync('test/bootstrap/css/bootstrap.css')
+// expect(normalize(a)).equal(normalize(b))
+
+fs.writeFileSync('a.css', normalize(a), 'utf8')
+fs.writeFileSync('b.css', normalize(b), 'utf8')
+
 function formatResult (str) {
   return str.replace(/\n/g, '\\n').replace(/\s+$/, '[ ]')
 }
@@ -98,6 +113,12 @@ describe('Test cli converter', function () {
   it('format with -c', function(done) {
     // with explicitly -f less option
     testCli('', ['-c', 'p{color: red;}'], 'file::test/cli/command-line.js', done)
+
+  })
+
+  it('format with -k', function(done) {
+    // keep vendor prefix
+    testCli('test/cli/keep-vendor.css', ['-k', '-o', 'cli-temp.js'], 'file::test/cli/keep-vendor.js', done)
 
   })
 

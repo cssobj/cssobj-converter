@@ -3,14 +3,15 @@
 
   Options:
 
-    --help, -h       show help message
-    --version, -v    show version number
-    --output, -o     output filename(.js file)
-    --pretty, -p     pretty format output js object
-    --css, -c        css code from command line
-    --format, -f     supported: css,scss,less
-    --watch, -w      watch [dir] for changes
-    --recursive, -r  recursively convert/watch for [dir]
+    --help, -h        show help message
+    --version, -v     show version number
+    --output, -o      output filename(.js file)
+    --pretty, -p      pretty format output js object
+    --css, -c         css code from command line
+    --format, -f      supported: css,scss,less
+    --watch, -w       watch [dir] for changes
+    --recursive, -r   recursively convert/watch for [dir]
+    --keepVendor, -k  keep vendor prefix for css props
 
   Examples:
 
