@@ -6,7 +6,7 @@ var util = require('util')
 var src = 'h1{font-size:12px;color:blue;}\n@media(max-width: 800px){color:purple; p{color:red;}}'
 
 var reOneRule = /^(?:charset|import|namespace)/
-
+var reGroupRule = /^(?:media|document|supports|page|keyframes)/
 
 // for old node(0.10), using \\ instead of \\\\
 var backSlash = util.inspect({'\\_':1}).length===12 ? '\\' : '\\\\'
@@ -58,6 +58,7 @@ var syntax = {
 
 function convertObj (src, format) {
   var store = {}
+  var curObj = null
 
   try {
     var ast = postcss([]).process(src, { parser: syntax[format] }).result.root
@@ -102,19 +103,26 @@ function convertObj (src, format) {
   }
 
   ast.walk(function(v) {
+    var obj = v.parent && v.parent.obj || store
     switch (v.type) {
     case 'atrule':
-      if(reOneRule.test(v.name)){
-        arrayKV(store, '@'+v.name, v.params)
-        break
+      if(reOneRule.test(v.name)) {
+        arrayKV(obj, '@'+v.name, v.params)
+      } else {
+        var key = name(v)
+        var body = reGroupRule.test(v.name) ? [] : {}
+        if (Array.isArray(obj)) obj.push({[key]: body})
+        else if(!(key in obj)) obj[key] = body
+        else body = obj[key]
+        v.obj = body
       }
+      break
     case 'rule':
-      if(format=='less'){
+      if(format=='less') {
         var arrExt = parseExtend(v.selector)
         var arrMix = parseMixin(v.selector)
         if(arrExt) v.selector = arrExt[0]
       }
-      var obj = getObj(v)
       var sel = name(v)
       var body = {}
       // it's LESS :extend / mixin
@@ -145,19 +153,22 @@ function convertObj (src, format) {
           body.$extend = arrExt[1]||''
         }
       }
-      if(sel in obj){
+      if(Array.isArray(obj)){
+        obj.push({[sel]: body})
+      } else if (sel in obj) {
         arrayKV(obj, sel, body)
       } else {
         obj[sel] = body
       }
+      v.obj = body
       break
     case 'decl':
       // put back IE hacks from v.raws
       var prop = ''
       var value = v.value
 
-      var obj = getObj(v)
-      if(obj && obj.constructor == Array) obj = obj[obj.length-1]
+      if(!obj) return
+      // if(obj && obj.constructor == Array) obj = obj[obj.length-1]
 
       // css hacks stored in v.raws.before
       var prefix = v.raws.before.match(/[*_]+$/)

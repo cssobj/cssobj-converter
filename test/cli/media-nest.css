@@ -1,0 +1,13 @@
+@media print {
+  p {color: red;}
+}
+div {font:123;}
+@media print {
+  p {
+    abc: blue;
+    cde: 1;
+    abc: 2;
+  }
+  x {yy:2;}
+  p {ff: 5}
+}

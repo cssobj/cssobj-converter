@@ -8,6 +8,10 @@ function formatResult (str) {
   return str.replace(/\n/g, '\\n').replace(/\s+$/, '[ ]')
 }
 
+function strToObj(str) {
+  return new Function('return ' + str)()
+}
+
 function testCli(source, option, target, done) {
   var fileRe = /^file::/
   var folderRe = /^folder::/
@@ -42,7 +46,7 @@ function testCli(source, option, target, done) {
         }
         if(srcFile) fs.unlinkSync(srcFile)
       }
-      expect(output).equal(target)
+      expect(strToObj(output)).deep.equal(strToObj(target))
     }
 
     // folder type check
@@ -54,7 +58,7 @@ function testCli(source, option, target, done) {
           var filePath = path.join(source, file)
           var code = fs.readFileSync(filePath, 'utf8').trim()
           fs.unlinkSync(filePath)
-          expect(result[file]).equal(code)
+          expect(strToObj(result[file])).deep.equal(strToObj(code))
         }
       })
     }
@@ -99,6 +103,14 @@ describe('Test cli converter', function () {
 
   it('with output file and no pretty', function(done) {
     testCli('test/cli/test.css', ['-o', 'cli-temp.js', '-p', false], 'file::test/cli/test.js', done)
+  })
+
+})
+
+describe('test with multiple @media and nested', function() {
+
+  it('should work with media-nest.css', function(done) {
+    testCli('test/cli/media-nest.css', ['-o', 'cli-temp.js', '-p', true], 'file::test/cli/media-nest.js', done)
   })
 
 })
