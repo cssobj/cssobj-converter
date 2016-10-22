@@ -16,8 +16,8 @@ function normalize(s) { return postcss.process(s).css }
 // var b = fs.readFileSync('test/bootstrap/css/bootstrap.css')
 // // expect(normalize(a)).equal(normalize(b))
 
-fs.writeFileSync('a.css', normalize(a), 'utf8')
-fs.writeFileSync('b.css', normalize(b), 'utf8')
+// fs.writeFileSync('a.css', normalize(a), 'utf8')
+// fs.writeFileSync('b.css', normalize(b), 'utf8')
 
 function formatResult (str) {
   return str.replace(/\n/g, '\\n').replace(/\s+$/, '[ ]')
