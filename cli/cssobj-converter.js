@@ -2,6 +2,7 @@
 
 var fs = require('fs')
 var util = require('util')
+var objutil = require('objutil')
 var esformatter = require('esformatter')
 var convert = require('../src/cssobj-converter.js')
 var minimist = require('minimist')
@@ -11,6 +12,17 @@ var watch = require('node-watch')
 var pkg = require('../package.json')
 
 var argv = process.argv.slice(2)
+var allowedArgs = {
+  'v': 'version',
+  'h': 'help',
+  'p': 'pretty',
+  'o': 'output',
+  'f': 'format',
+  'k': 'keepVendor',
+  'c': 'css',
+  'w': 'watch',
+  'r': 'recursive'
+}
 var args = minimist(argv, {
   'boolean': [
     'pretty',
@@ -18,17 +30,7 @@ var args = minimist(argv, {
     'keepVendor',
     'recursive'
   ],
-  'alias': {
-    'v': 'version',
-    'h': 'help',
-    'p': 'pretty',
-    'o': 'output',
-    'f': 'format',
-    'k': 'keepVendor',
-    'c': 'css',
-    'w': 'watch',
-    'r': 'recursive'
-  },
+  'alias': allowedArgs,
   'default': {
     pretty: true,
     watch: false,
@@ -118,7 +120,23 @@ function convertFile(file, str, format) {
     }
   }
 
-  var code = util.inspect(convert(str, format, {keepVendor: args.keepVendor}), {depth: null})
+  var code = util.inspect(
+    convert(
+      str,
+      format,
+      // cli args passed into options
+      // but exclude all allowedArgs keys
+      objutil.exclude(
+        objutil.merge({}, args),
+        objutil.assign(
+          allowedArgs,
+          objutil.invert(allowedArgs)
+        ),
+        {keepVendor: 0}
+      )
+    ),
+    {depth: null}
+  )
 
   if (args.pretty) {
     try{

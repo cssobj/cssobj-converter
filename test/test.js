@@ -4,21 +4,6 @@ var spawn = require('child_process').spawn
 var path = require('path')
 var fs = require('fs')
 
-var minifySelectors = require('postcss-minify-selectors')
-var minifyParams = require('postcss-minify-params')
-var perfectionist = require('perfectionist')
-var postcssSorting = require('postcss-sort-style-rules')
-var postcss = require('postcss')([minifySelectors(), minifyParams(), perfectionist({format:''}), postcssSorting()])
-
-function normalize(s) { return postcss.process(s).css }
-
-// var a= fs.readFileSync('test/bootstrap/css/_bootstrap.css')
-// var b = fs.readFileSync('test/bootstrap/css/bootstrap.css')
-// // expect(normalize(a)).equal(normalize(b))
-
-// fs.writeFileSync('a.css', normalize(a), 'utf8')
-// fs.writeFileSync('b.css', normalize(b), 'utf8')
-
 function formatResult (str) {
   return str.replace(/\n/g, '\\n').replace(/\s+$/, '[ ]')
 }
@@ -34,6 +19,7 @@ function testCli(source, option, target, done) {
   // var format = path.extname(testFile).slice(1).toLowerCase()
   var cliProcess = spawn('node', [cli].concat(option).concat([source]))
   var srcFile = option[0]=='-o' && option[1]
+  var isJS = option[0]=='-f' && option[1] == 'js'
 
   var output = '', msg=''
   cliProcess.stdout.on('data', function(data) {
@@ -61,7 +47,15 @@ function testCli(source, option, target, done) {
         }
         if(srcFile) fs.unlinkSync(srcFile)
       }
-      expect(strToObj(output)).deep.equal(strToObj(target))
+      if(!isJS) {
+        output = strToObj(output)
+        target = strToObj(target)
+      } else {
+        // for format=js, should read string from output
+        output = output.replace(/^\s*\'/, '').replace(/\'\s*$/, '')
+        target = target.replace(/\n/g, '')
+      }
+      expect(output).deep.equal(target)
     }
 
     // folder type check
@@ -119,6 +113,12 @@ describe('Test cli converter', function () {
   it('format with -k', function(done) {
     // keep vendor prefix
     testCli('test/cli/keep-vendor.css', ['-k', true], 'file::test/cli/keep-vendor.js', done)
+
+  })
+
+  it('format with js', function(done) {
+    // keep vendor prefix
+    testCli('test/cli/test.js', ['-f', 'js', '--newLine', ''], 'file::test/cli/test.css', done)
 
   })
 

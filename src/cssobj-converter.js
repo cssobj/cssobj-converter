@@ -1,3 +1,5 @@
+var cssobjPluginGencss = require('cssobj-plugin-gencss')
+var cssobjCore = require('cssobj-core')
 var postcss = require('postcss')
 var scss = require('postcss-scss')
 var less = require('postcss-less')
@@ -56,6 +58,10 @@ function joinLines(str) {
   }).join(' ')
 }
 
+function strToObj(str) {
+  return new Function('return ' + str)()
+}
+
 var syntax = {
   'scss': scss,
   'less': less,
@@ -64,6 +70,15 @@ var syntax = {
 
 function convertObj (src, format, option) {
   option = option||{}
+
+  if(format=='js') {
+    var cssobj = cssobjCore({plugins:[
+      cssobjPluginGencss(option)
+    ]})
+    var ret = cssobj(strToObj(src))
+    return ret.css
+  }
+
   var store = {}
   var curObj = null
 

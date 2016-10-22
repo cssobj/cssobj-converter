@@ -8,7 +8,7 @@
     --output, -o      output filename(.js file)
     --pretty, -p      pretty format output js object
     --css, -c         css code from command line
-    --format, -f      supported: css,scss,less
+    --format, -f      supported: css,less,js
     --watch, -w       watch [dir] for changes
     --recursive, -r   recursively convert/watch for [dir]
     --keepVendor, -k  keep vendor prefix for css props
@@ -22,5 +22,7 @@
     cssobj abc.less -f less -o abc.js
     cssobj abc.less -o abc.js   # same as above
     cssobj -c "p{ color:red; }"
-    cssobj ./abc      # all files convert to .js
-    cssobj ./abc -w   # convert all files and watch
+    cssobj ./abc         # all files convert to .js
+    cssobj ./abc -w      # convert all files and watch
+    cssobj abc.js -f js  # convert js to css
+    cssobj -c '{p:{color: "red"}}' -f js

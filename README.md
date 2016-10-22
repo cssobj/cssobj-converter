@@ -35,7 +35,7 @@ option | short | description
 --output | -o | output file name(.js file)
 --pretty | -p | pretty format output js object **default: true**
 --css | -c | css code from command line
---format | -f | supported: css,less **default: css**
+--format | -f | supported: css,less,js. If **js** then convert from cssobj into css. **default: css**
 --watch | -w | watch [dir] for changes **default: false**
 --recursive | -r | recursive convert all [css/less] files in [dir]; **default: false**
 --keepVendor | -k | keep vendor prefix for css props
@@ -48,6 +48,10 @@ cssobj abc.css
 
 #convert abc.css into cssobj, output to abc.js
 cssobj abc.css -o abc.js
+
+#convert abc.js into css then output
+cssobj -c '{p:{color: "red"}}' -f js
+cssobj abc.js -f js
 
 #convert abc.css into cssobj, output to abc.js, without pretty format
 cssobj abc.css -o abc.js -p false
