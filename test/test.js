@@ -118,7 +118,7 @@ describe('Test cli converter', function () {
 
   it('format with -k', function(done) {
     // keep vendor prefix
-    testCli('test/cli/keep-vendor.css', ['-k', '-o', 'cli-temp.js'], 'file::test/cli/keep-vendor.js', done)
+    testCli('test/cli/keep-vendor.css', ['-k', true], 'file::test/cli/keep-vendor.js', done)
 
   })
 
