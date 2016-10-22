@@ -12,9 +12,9 @@ var postcss = require('postcss')([minifySelectors(), minifyParams(), perfectioni
 
 function normalize(s) { return postcss.process(s).css }
 
-var a= fs.readFileSync('test/bootstrap/css/_bootstrap.css')
-var b = fs.readFileSync('test/bootstrap/css/bootstrap.css')
-// expect(normalize(a)).equal(normalize(b))
+// var a= fs.readFileSync('test/bootstrap/css/_bootstrap.css')
+// var b = fs.readFileSync('test/bootstrap/css/bootstrap.css')
+// // expect(normalize(a)).equal(normalize(b))
 
 fs.writeFileSync('a.css', normalize(a), 'utf8')
 fs.writeFileSync('b.css', normalize(b), 'utf8')

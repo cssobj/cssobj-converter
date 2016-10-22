@@ -2,7 +2,7 @@
 
 [![Join the chat at https://gitter.im/css-in-js/cssobj](https://badges.gitter.im/css-in-js/cssobj.svg)](https://gitter.im/css-in-js/cssobj) [![Build Status](https://travis-ci.org/cssobj/cssobj-converter.svg?branch=master)](https://travis-ci.org/cssobj/cssobj-converter)
 
-Convert from normal css to cssobj.
+Convert from normal css/LESS/SASS/SCSS to [cssobj](https://github.com/cssobj/cssobj).
 
 The online version is below:
 
@@ -84,11 +84,10 @@ console.log( converter('p { color: red; }') )
 
 ## Server
 
-Clone this repo, and run:
+From the lib folder, `npm i` then run below script:
 
 ``` bash
-npm install
-npm server
+npm run server
 ```
 
 Service URL: `http://localhost:8080`

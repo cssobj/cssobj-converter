@@ -1,7 +1,7 @@
 {
   "name": "cssobj-converter",
   "version": "2.0.2",
-  "description": "Convert from css text into cssobj.",
+  "description": "Convert from normal css/LESS/SASS/SCSS to cssobj",
   "keywords": [
     "cssobj",
     "cssobj converter",
@@ -41,7 +41,6 @@
     "perfectionist": "^2.3.1",
     "postcss-minify-params": "^1.0.5",
     "postcss-minify-selectors": "^2.0.5",
-    "postcss-sort-style-rules": "^0.2.0",
-    "postcss-sorting": "^1.7.0"
+    "postcss-sort-style-rules": "^0.2.0"
   }
 }
