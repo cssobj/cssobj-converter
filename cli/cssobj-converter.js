@@ -120,23 +120,22 @@ function convertFile(file, str, format) {
     }
   }
 
-  var code = util.inspect(
-    convert(
-      str,
-      format,
-      // cli args passed into options
-      // but exclude all allowedArgs keys
-      objutil.exclude(
-        objutil.merge({}, args),
-        objutil.assign(
-          allowedArgs,
-          objutil.invert(allowedArgs)
-        ),
-        {keepVendor: 0}
-      )
-    ),
-    {depth: null}
+  var result = convert(
+    str,
+    format,
+    // cli args passed into options
+    // but exclude all allowedArgs keys
+    objutil.exclude(
+      objutil.merge({}, args),
+      objutil.assign(
+        allowedArgs,
+        objutil.invert(allowedArgs)
+      ),
+      {keepVendor: 0}
+    )
   )
+
+  var code = format == 'js' ? result : util.inspect( result, {depth: null} )
 
   if (args.pretty) {
     try{

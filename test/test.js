@@ -1,8 +1,11 @@
 var expect = require('chai').expect
 var convert = require('../src/cssobj-converter.js')
 var spawn = require('child_process').spawn
+var exec = require('child_process').exec
 var path = require('path')
 var fs = require('fs')
+
+var cli = 'cli/cssobj-converter.js'
 
 function formatResult (str) {
   return str.replace(/\n/g, '\\n').replace(/\s+$/, '[ ]')
@@ -15,7 +18,6 @@ function strToObj(str) {
 function testCli(source, option, target, done) {
   var fileRe = /^file::/
   var folderRe = /^folder::/
-  var cli = 'cli/cssobj-converter.js'
   // var format = path.extname(testFile).slice(1).toLowerCase()
   var cliProcess = spawn('node', [cli].concat(option).concat([source]))
   var srcFile = option[0]=='-o' && option[1]
@@ -51,9 +53,8 @@ function testCli(source, option, target, done) {
         output = strToObj(output)
         target = strToObj(target)
       } else {
-        // for format=js, should read string from output
-        output = output.replace(/^\s*\'/, '').replace(/\'\s*$/, '')
-        target = target.replace(/\n/g, '')
+        output = output.trim()
+        target = target.trim()
       }
       expect(output).deep.equal(target)
     }
@@ -118,7 +119,7 @@ describe('Test cli converter', function () {
 
   it('format with js', function(done) {
     // keep vendor prefix
-    testCli('test/cli/test.js', ['-f', 'js', '--newLine', ''], 'file::test/cli/test.css', done)
+    testCli('test/cli/test.js', ['-f', 'js'], 'file::test/cli/test.css', done)
 
   })
 
@@ -139,5 +140,44 @@ describe('test with multiple @media and nested', function() {
 describe('test with folder', function() {
   it('should accept folder', function(done) {
     testCli('test/cli/folder', ['-p', false], `folder::cli/folder.js`, done)
+  })
+})
+
+describe('css-js-css test', function() {
+  this.timeout(3e4)
+
+  it('it should work with bootstrap.css', function(done) {
+    var resultOK = /0 extra rules and 0 missing rules/
+    var baseFolder = './test/bootstrap/css/'
+    var lib = path.relative(baseFolder, cli)
+
+    var cmds = [
+      ['node', lib, 'bootstrap.css', '-o', 'bootstrap_1.js'],
+      ['node', lib, 'bootstrap_1.js', '-f js -o', 'bootstrap_1.css'],
+      function(next) {
+        var file = path.join(baseFolder, 'bootstrap_1.css')
+        fs.writeFileSync(file, fs.readFileSync(file, 'utf8').replace(/ 0\./g, ' .'), 'utf8')
+        next()
+      },
+      ['strip-css-comments --no-preserve bootstrap.css > bootstrap_0.css'],
+      ['css-astdiff', 'bootstrap_0.css', 'bootstrap_1.css']
+    ]
+
+    var execCmds = function(output) {
+      var cmd = cmds.shift()
+      if(cmd) {
+        if(typeof cmd=='function') cmd(execCmds)
+        else exec(cmd.join(' '), {cwd: baseFolder}, function(err, output) {
+          // console.log(cmd, err, output)
+          if(err) return done(err)
+          execCmds(output)
+        })
+      } else {
+        expect(output).match(resultOK)
+        done()
+      }
+    }
+    execCmds()
+
   })
 })
