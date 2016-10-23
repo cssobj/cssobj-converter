@@ -143,41 +143,50 @@ describe('test with folder', function() {
   })
 })
 
+
+function testCSSJS(filePath, done) {
+  var resultOK = /0 extra rules and 0 missing rules/i
+  var pathObj = path.parse(filePath)
+  var folder = pathObj.dir
+  var name = pathObj.name
+  var ext = pathObj.ext
+  var lib = path.relative(folder, cli)
+
+  if(!/css|less/.test(ext)) return done('file type should be .css|.less')
+
+  var cmds = [
+    ['node', lib, name + ext, '-o', name + '_1' + '.js'],
+    ['node', lib, name + '_1' + '.js', '-f js -o', name + '_1' + '.css'],
+    function (next) {
+      var file = path.join(folder, name + '_1' + '.css')
+      fs.writeFileSync(file, fs.readFileSync(file, 'utf8').replace(/ 0\./g, ' .'), 'utf8')
+      next()
+    },
+    ['strip-css-comments --no-preserve ' + name + ext + ' > ' + name + '_0' + ext],
+    ['css-astdiff', name + '_0' + ext, name + '_1' + ext]
+  ]
+
+  var execCmds = function(output) {
+    var cmd = cmds.shift()
+    if(cmd) {
+      if(typeof cmd=='function') cmd(execCmds)
+      else exec(cmd.join(' '), {cwd: folder}, function(err, output) {
+        // console.log(cmd, err, output)
+        if(err) return done(err)
+        execCmds(output)
+      })
+    } else {
+      expect(output).match(resultOK)
+      done()
+    }
+  }
+  execCmds()
+}
+
 describe('css-js-css test', function() {
   this.timeout(3e4)
 
   it('it should work with bootstrap.css', function(done) {
-    var resultOK = /0 extra rules and 0 missing rules/
-    var baseFolder = './test/bootstrap/css/'
-    var lib = path.relative(baseFolder, cli)
-
-    var cmds = [
-      ['node', lib, 'bootstrap.css', '-o', 'bootstrap_1.js'],
-      ['node', lib, 'bootstrap_1.js', '-f js -o', 'bootstrap_1.css'],
-      function(next) {
-        var file = path.join(baseFolder, 'bootstrap_1.css')
-        fs.writeFileSync(file, fs.readFileSync(file, 'utf8').replace(/ 0\./g, ' .'), 'utf8')
-        next()
-      },
-      ['strip-css-comments --no-preserve bootstrap.css > bootstrap_0.css'],
-      ['css-astdiff', 'bootstrap_0.css', 'bootstrap_1.css']
-    ]
-
-    var execCmds = function(output) {
-      var cmd = cmds.shift()
-      if(cmd) {
-        if(typeof cmd=='function') cmd(execCmds)
-        else exec(cmd.join(' '), {cwd: baseFolder}, function(err, output) {
-          // console.log(cmd, err, output)
-          if(err) return done(err)
-          execCmds(output)
-        })
-      } else {
-        expect(output).match(resultOK)
-        done()
-      }
-    }
-    execCmds()
-
+    testCSSJS('./test/bootstrap/css/bootstrap.css', done)
   })
 })
