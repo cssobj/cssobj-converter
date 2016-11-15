@@ -1,5 +1,5 @@
 
-  Usage: cssobj [options] input.css
+  Usage: cssobj [options] [input.css]
 
   Options:
 
@@ -15,6 +15,7 @@
 
   Examples:
 
+    cssobj  # read from STDIN
     cssobj abc.css
     cssobj abc.css -w # watch abc.css and output
     cssobj abc.css -o abc.js
