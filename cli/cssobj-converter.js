@@ -58,7 +58,7 @@ if (!source && !str) {
     if (chunk !== null) {
       if (chunk.toString().charCodeAt(0) === 4) {  // windows stdin won't send EOF
         process.stdin.end()
-        console.log('\nresult css:')
+        console.log('\n****', 'Result', format=='js'?'CSS':'JS' ,':', '\n')
         output(convertFile(null, str, format))
       } else {
         str += chunk
@@ -66,7 +66,7 @@ if (!source && !str) {
     }
   })
   process.stdin.on('end', () => {
-    console.log('\nresult css:')
+    console.log('\n****', 'Result', format=='js'?'CSS':'JS' ,':', '\n')
     output(convertFile(null, str, format))
   })
 }
