@@ -25,7 +25,7 @@ npm install -g cssobj-converter
 ### Usage
 
 ``` bash
-cssobj [option] cssfile
+cssobj [option] [cssfile]
 ```
 
 ### Option
@@ -40,9 +40,14 @@ option | short | description
 --recursive | -r | recursive convert all [css/less] files in [dir]; **default: false**
 --keepVendor | -k | keep vendor prefix for css props
 
+If no `cssfile` and no `-c`, then cssobj will read from **STDIN**.
+
 ### Example
 
 ``` bash
+#read from stdin, (Ctrl+D) to convert
+cssobj
+
 #convert abc.css into cssobj, output to stdout
 cssobj abc.css
 

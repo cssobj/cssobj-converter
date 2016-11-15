@@ -39,21 +39,42 @@ var args = minimist(argv, {
   }
 })
 
-if(args.help || argv.length==0) {
+if(args.help) {
   console.log(fs.readFileSync(path.join(__dirname, 'usage.md'), 'utf8'))
   process.exit(0)
+}
+
+
+var isDir = false
+var source = args._.shift()
+
+var format = args.format
+var str = args.css || ''
+
+if (!source && !str) {
+  process.stdin.setEncoding('utf8')
+  process.stdin.on('readable', () => {
+    var chunk = process.stdin.read()
+    if (chunk !== null) {
+      if (chunk.toString().charCodeAt(0) === 4) {  // windows stdin won't send EOF
+        process.stdin.end()
+        console.log('\nresult css:')
+        output(convertFile(null, str, format))
+      } else {
+        str += chunk
+      }
+    }
+  })
+  process.stdin.on('end', () => {
+    console.log('\nresult css:')
+    output(convertFile(null, str, format))
+  })
 }
 
 if(args.version) {
   console.log(pkg.version)
   process.exit(0)
 }
-
-var isDir = false
-var source = args._.shift()
-
-var format = args.format
-var str = args.css
 
 if (str) {
   output(convertFile(null, str, format))
