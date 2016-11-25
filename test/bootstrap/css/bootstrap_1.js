@@ -1,4 +1,4 @@
-{
+module.exports = {
   html: [{
     fontFamily: 'sans-serif',
     WebkitTextSizeAdjust: '100%',

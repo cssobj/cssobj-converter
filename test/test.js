@@ -12,6 +12,10 @@ function formatResult (str) {
 }
 
 function strToObj(str) {
+  var moduleRe = /^\s*(module\.exports\s*=|exports\s*=|export\s+default\s*)/i
+  if(moduleRe.test(str)) {
+    str = str.replace(moduleRe, '')
+  }
   return new Function('return ' + str)()
 }
 
@@ -33,21 +37,22 @@ function testCli(source, option, target, done) {
   cliProcess.on('exit', function() {
     if(msg) return done(msg)
 
+    if(srcFile) {
+      if(output) return done('should have empty output, but the output is:\n'+ output)
+      try {
+        output = fs.readFileSync(srcFile, 'utf8')
+      } catch(e) {
+        return done(e)
+      }
+      if(srcFile) fs.unlinkSync(srcFile)
+    }
+
     // file type result check
     if(fileRe.test(target)) {
       try {
         target = fs.readFileSync(target.replace(fileRe, ''), 'utf8')
       } catch(e) {
         return done(e)
-      }
-      if(srcFile) {
-        if(output) return done('should have empty output, but the output is:\n'+ output)
-        try {
-          output = fs.readFileSync(srcFile, 'utf8')
-        } catch(e) {
-          return done(e)
-        }
-        if(srcFile) fs.unlinkSync(srcFile)
       }
       if(!isJS) {
         output = strToObj(output)
@@ -57,10 +62,8 @@ function testCli(source, option, target, done) {
         target = target.trim()
       }
       expect(output).deep.equal(target)
-    }
-
-    // folder type check
-    if(folderRe.test(target)) {
+    } else if(folderRe.test(target)) {
+      // folder type check
       var result = require('./'+path.join(target.replace(folderRe, '')))
       fs.readdirSync(source, 'utf8').forEach(function(file) {
         if(/\.js$/.test(file)) {
@@ -71,6 +74,8 @@ function testCli(source, option, target, done) {
           expect(strToObj(result[file])).deep.equal(strToObj(code))
         }
       })
+    } else {
+      expect(output).equal(target)
     }
     // ensure test done
     done()
@@ -91,6 +96,36 @@ describe('Test cli converter', function () {
 
   it('with output file', function(done) {
     testCli('test/cli/test.css', ['-o', 'cli-temp.js'], 'file::test/cli/test-pretty.js', done)
+  })
+
+  it('with export str', function(done) {
+    this.timeout(3e4)
+
+    testCli('test/cli/export.css', ['-o', 'cli-temp.js'], `module.exports = {
+  p: {
+    color: 'red'
+  }
+}
+`, done)
+  })
+
+  it('with export str with ES6', function(done) {
+
+    testCli('test/cli/export.css', ['-o', 'cli-temp2.js', '-e', 'export default '], `export default {
+  p: {
+    color: 'red'
+  }
+}
+`, done)
+  })
+
+  it('with export str with empty', function(done) {
+    testCli('test/cli/export.css', ['-o', 'cli-temp3.js', '--export', ''], `{
+  p: {
+    color: 'red'
+  }
+}
+`, done)
   })
 
   it('format less no -f', function(done) {

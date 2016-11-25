@@ -59,6 +59,10 @@ function joinLines(str) {
 }
 
 function strToObj(str) {
+  var moduleRe = /^\s*(module\.exports\s*=|exports\s*=|export\s+default\s*)/i
+  if(moduleRe.test(str)) {
+    str = str.replace(moduleRe, '')
+  }
   return new Function('return ' + str)()
 }
 
@@ -75,7 +79,7 @@ function convertObj (src, format, option) {
     var cssobj = cssobjCore({plugins:[
       cssobjPluginGencss(option)
     ]})
-    var ret = cssobj(strToObj(src))
+    var ret = cssobj(src && typeof src==='object' ? src : strToObj(src))
     return ret.css
   }
 

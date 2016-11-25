@@ -17,6 +17,7 @@ var allowedArgs = {
   'h': 'help',
   'p': 'pretty',
   'o': 'output',
+  'e': 'export',
   'f': 'format',
   'k': 'keepVendor',
   'c': 'css',
@@ -32,6 +33,7 @@ var args = minimist(argv, {
   ],
   'alias': allowedArgs,
   'default': {
+    export: 'module.exports = ',
     pretty: true,
     watch: false,
     keepVendor: false,
@@ -50,6 +52,7 @@ var source = args._.shift()
 
 var format = args.format
 var str = args.css || ''
+var exportStr = typeof args.export=='string' ? args.export : ''
 
 if (!source && !str) {
   process.stdin.setEncoding('utf8')
@@ -119,13 +122,17 @@ function processFile(file) {
       return
     }
     var code = convertFile(null, str, format)
-    fs.writeFileSync(file + '.js', code+'\n', 'utf8')
+    fs.writeFileSync(file + '.js', exportStr + code+'\n', 'utf8')
   })
 }
 
 function output(code) {
   if (args.output) {
-    fs.writeFileSync(args.output, code+'\n', 'utf8')
+    fs.writeFileSync(
+      args.output,
+      code+'\n',
+      'utf8'
+    )
   } else {
     console.log(code)
   }
@@ -135,6 +142,11 @@ function convertFile(file, str, format) {
   if(!str && file) {
     try {
       str = fs.readFileSync(file, 'utf8')
+      if (format == 'js' && /^\s*(module\.|exports)/.test(str)) {
+        var relative = path.relative(__dirname, file)
+        if(relative[0]!=='.') relative = './' + relative
+        str = require(relative)
+      }
     } catch(e) {
       console.error(e)
       process.exit(1)
@@ -164,5 +176,5 @@ function convertFile(file, str, format) {
     }catch(e){}
   }
 
-  return code
+  return file && format !== 'js' ? exportStr + code : code
 }
