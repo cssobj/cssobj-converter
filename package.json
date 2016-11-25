@@ -1,6 +1,6 @@
 {
   "name": "cssobj-converter",
-  "version": "2.1.5",
+  "version": "2.1.6",
   "description": "Convert from normal css/LESS/SASS/SCSS to cssobj",
   "keywords": [
     "cssobj",
@@ -27,10 +27,10 @@
   "author": "James Yang <jamesyang999@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "cssobj-core": "^0.6.4",
-    "cssobj-plugin-gencss": "^2.0.3",
+    "cssobj-core": "*",
+    "cssobj-plugin-gencss": "*",
+    "esformatter": "*",
     "dive": "^0.5.0",
-    "esformatter": "^0.9.5",
     "minimist": "^1.2.0",
     "node-watch": "^0.4.0",
     "objutil": "^2.0.2",
