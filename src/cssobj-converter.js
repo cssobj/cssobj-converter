@@ -11,24 +11,7 @@ var reOneRule = /^(?:charset|import|namespace)/
 var reGroupRule = /^(?:media|document|supports|page|keyframes)/
 
 // for old node(0.10), using \\ instead of \\\\
-var backSlash = util.inspect({'\\_':1}).length===12 ? '\\' : '\\\\'
-
-// check if str offset position in inside '' or ""
-function insideStr (str, offset) {
-  for (var i = 0, curPair = '', char; char = str[i], i < offset; i++) {
-    if (curPair && curPair === char) curPair = ''
-    else if (char == '"' || char == "'") {
-      if (!curPair) curPair = char
-    }
-  }
-  return curPair
-}
-
-// replacer when & is not insideStr
-function replacer (match, offset, str) {
-  return insideStr(str, offset) ? backSlash+'&' : '&'
-}
-
+// var backSlash = util.inspect({'\\_':1}).length===12 ? '\\' : '\\\\'
 
 function camelCase (input) {
   // make -ms-prop result in msProp
@@ -104,13 +87,17 @@ function convertObj (src, format, option) {
       joinLines(v.params)
     )
 
-    if (v.type == 'rule') return joinLines(v.selector).replace( /&/g,
-      // how to deal with & ?
-      // stylus using \& to escape, SCSS/LESS check insideStr
-      format==='less'
-        ? '&'
-        : backSlash + '&'
-    )
+    if (v.type == 'rule') return joinLines(v.selector)
+
+    /* no need since cssobj-core 1.1.1
+      .replace( /&/g,
+                // how to deal with & ?
+                // stylus using \& to escape, SCSS/LESS replace only in selector
+                format==='less'
+                ? '&'
+                : backSlash + '&'
+              )
+    */
 
   }
 
