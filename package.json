@@ -1,6 +1,6 @@
 {
   "name": "cssobj-converter",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Convert from normal css/LESS/SASS/SCSS to cssobj",
   "keywords": [
     "cssobj",
@@ -33,7 +33,7 @@
     "dive": "^0.5.0",
     "minimist": "^1.2.0",
     "node-watch": "^0.4.0",
-    "objutil": "^2.0.2",
+    "objutil": "2.0.2",
     "postcss": "^5.0.21",
     "postcss-less": "^0.14.0",
     "postcss-scss": "^0.1.9"
