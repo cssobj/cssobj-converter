@@ -157,8 +157,8 @@ function convertFile(file, str, format) {
     str,
     format,
     // cli args passed into options
-    // but exclude all allowedArgs keys
-    objutil.exclude(
+    // but pick all allowedArgs keys
+    objutil.pick(
       objutil.merge({}, args),
       objutil.assign(
         allowedArgs,
