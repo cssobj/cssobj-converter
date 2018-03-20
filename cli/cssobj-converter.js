@@ -55,6 +55,7 @@ var str = args.css || ''
 var exportStr = typeof args.export=='string' ? args.export : ''
 
 if (!source && !str) {
+  console.log(`(Press CTRL+D to end) input/paste CSS below:`)
   process.stdin.setEncoding('utf8')
   process.stdin.on('readable', () => {
     var chunk = process.stdin.read()
