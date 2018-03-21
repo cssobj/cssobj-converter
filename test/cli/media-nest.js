@@ -1,4 +1,4 @@
-{
+module.exports = {default: {
   '@media print': [
     {
       p: {
@@ -23,4 +23,5 @@
   div: {
     font: 123
   }
+}
 }

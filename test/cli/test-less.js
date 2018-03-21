@@ -1,4 +1,4 @@
-{
+module.exports = {default: {
   '$vars': {
     'alert-padding': '12px'
   },
@@ -27,4 +27,5 @@
       margin: '@b'
     }
   }
+}
 }

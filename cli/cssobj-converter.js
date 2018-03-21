@@ -53,6 +53,7 @@ var source = args._.shift()
 var format = args.format
 var str = args.css || ''
 var exportStr = typeof args.export=='string' ? args.export : '%s'
+if(exportStr.indexOf('%s')<0) exportStr+='%s'
 
 if (!source && !str) {
   console.log(`(Press CTRL+D to end) input/paste CSS below:`)
@@ -146,7 +147,7 @@ function convertFile(file, str, format) {
       if (format == 'js' && /^\s*(module\.|exports)/.test(str)) {
         var relative = path.relative(__dirname, file)
         if(relative[0]!=='.') relative = './' + relative
-        str = require(relative)
+        str = require(relative).default
       }
     } catch(e) {
       console.error(e)
