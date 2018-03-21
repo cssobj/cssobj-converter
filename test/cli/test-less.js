@@ -1,4 +1,4 @@
-module.exports = {default: {
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = {
   '$vars': {
     'alert-padding': '12px'
   },
@@ -27,5 +27,4 @@ module.exports = {default: {
       margin: '@b'
     }
   }
-}
 }

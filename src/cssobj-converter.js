@@ -42,11 +42,10 @@ function joinLines(str) {
 }
 
 function strToObj(str) {
-  var moduleRe = /^\s*(module\.exports\s*=|exports\s*=|export\s+default\s*)/i
-  if(moduleRe.test(str)) {
-    str = str.replace(moduleRe, '')
-  }
-  return new Function('return ' + str)()
+  if(/^\s*{/.test(str)) str = 'exports='+str
+  var ret = new Function('exports', str + ';return exports')({})
+  if(ret.__esModule) ret = ret.default
+  return ret
 }
 
 var syntax = {

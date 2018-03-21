@@ -33,7 +33,8 @@ var args = minimist(argv, {
   ],
   'alias': allowedArgs,
   'default': {
-    export: 'module.exports = {default: %s}',
+    export: `Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = %s`,
     pretty: true,
     watch: false,
     keepVendor: false,
@@ -56,7 +57,8 @@ var exportStr = typeof args.export=='string' ? args.export : '%s'
 if(exportStr.indexOf('%s')<0) exportStr+='%s'
 
 if (!source && !str) {
-  console.log(`(Press CTRL+D to end) input/paste CSS below:`)
+  if(!args.version)
+     console.log(`(Press CTRL+D to end) input/paste CSS below:`)
   process.stdin.setEncoding('utf8')
   process.stdin.on('readable', () => {
     var chunk = process.stdin.read()

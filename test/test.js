@@ -12,13 +12,10 @@ function formatResult (str) {
 }
 
 function strToObj(str) {
-  var moduleRe = /^\s*(module\.exports\s*= {default: |exports\s*=|export\s+default\s*)/i
-  if(moduleRe.test(str)) {
-    const isModule = /^\s*module\./.test(str)
-    str = str.replace(moduleRe, '')
-    if(isModule) str=str.slice(0,-1)
-  }
-  return  // new Function('return ' + str)()
+  if(/^\s*{/.test(str)) str = 'exports='+str
+  var ret = new Function('exports', str + ';return exports')({})
+  if(ret.__esModule) ret = ret.default
+  return ret
 }
 
 function testCli(source, option, target, done) {
@@ -103,11 +100,11 @@ describe('Test cli converter', function () {
   it('with export str', function(done) {
     this.timeout(3e4)
 
-    testCli('test/cli/export.css', ['-o', 'cli-temp.js'], `module.exports = {default: {
+    testCli('test/cli/export.css', ['-o', 'cli-temp.js'], `Object.defineProperty(exports, "__esModule", { value: true });\nexports.default = {
   p: {
     color: 'red'
   }
-}}
+}
 `, done)
   })
 

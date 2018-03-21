@@ -1,4 +1,4 @@
-module.exports = {default: {
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = {
   '@media print': [
     {
       p: {
@@ -23,5 +23,4 @@ module.exports = {default: {
   div: {
     font: 123
   }
-}
 }

@@ -1,4 +1,5 @@
-module.exports = {default: {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = {
   '@media only screen and (min-width: 100px)': {
     '._prefix_p': {
       _color: 'blue'
@@ -12,5 +13,4 @@ module.exports = {default: {
   p3: {
     color: 'green'
   }
-}
 }
