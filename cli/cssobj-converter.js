@@ -33,7 +33,7 @@ var args = minimist(argv, {
   ],
   'alias': allowedArgs,
   'default': {
-    export: 'module.exports = ',
+    export: 'module.exports = {default: %s}',
     pretty: true,
     watch: false,
     keepVendor: false,
@@ -52,7 +52,7 @@ var source = args._.shift()
 
 var format = args.format
 var str = args.css || ''
-var exportStr = typeof args.export=='string' ? args.export : ''
+var exportStr = typeof args.export=='string' ? args.export : '%s'
 
 if (!source && !str) {
   console.log(`(Press CTRL+D to end) input/paste CSS below:`)
@@ -123,7 +123,7 @@ function processFile(file) {
       return
     }
     var code = convertFile(null, str, format)
-    fs.writeFileSync(file + '.js', exportStr + code+'\n', 'utf8')
+    fs.writeFileSync(file + '.js', exportStr.replace('%s', code)+'\n', 'utf8')
   })
 }
 
@@ -177,5 +177,5 @@ function convertFile(file, str, format) {
     }catch(e){}
   }
 
-  return file && format !== 'js' ? exportStr + code : code
+  return file && format !== 'js' ? exportStr.replace('%s', code) : code
 }
