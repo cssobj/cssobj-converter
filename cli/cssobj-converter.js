@@ -47,6 +47,10 @@ if(args.help) {
   process.exit(0)
 }
 
+if(args.version) {
+  console.log(pkg.version)
+  process.exit(0)
+}
 
 var isDir = false
 var source = args._.shift()
@@ -57,13 +61,16 @@ var exportStr = typeof args.export=='string' ? args.export : '%s'
 if(exportStr.indexOf('%s')<0) exportStr+='%s'
 
 if (!source && !str) {
-  if(!args.version)
-     console.log(`(Press CTRL+D to end) input/paste CSS below:`)
+  if(!process.stdin.isTTY) {
+    process.exit()
+  }
+  console.log(`(Press CTRL+D to end) input/paste CSS below:`)
   process.stdin.setEncoding('utf8')
-  process.stdin.on('readable', () => {
-    var chunk = process.stdin.read()
-    if (chunk !== null) {
-      if (chunk.toString().charCodeAt(0) === 4) {  // windows stdin won't send EOF
+  process.stdin.on('data', (chunk) => {
+    if (chunk) {
+      const parts = chunk.toString().split('\x04')
+      if (parts.length>1) {  // windows stdin won't send EOF
+        str += parts[0]
         process.stdin.end()
         console.log('\n****', 'Result', format=='js'?'CSS':'JS' ,':', '\n')
         output(convertFile(null, str, format))
@@ -76,11 +83,6 @@ if (!source && !str) {
     console.log('\n****', 'Result', format=='js'?'CSS':'JS' ,':', '\n')
     output(convertFile(null, str, format))
   })
-}
-
-if(args.version) {
-  console.log(pkg.version)
-  process.exit(0)
 }
 
 if (str) {
