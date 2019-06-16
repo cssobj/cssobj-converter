@@ -41,6 +41,8 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "css-semdiff": "^1.1.1",
-    "mocha": "^2.5.3"
+    "mocha": "^2.5.3",
+    "strip-css-comments": "^4.0.0",
+    "strip-css-comments-cli": "^2.0.2"
   }
 }

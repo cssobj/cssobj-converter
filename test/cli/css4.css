@@ -1,0 +1,9 @@
+:root{
+    --red: red;
+    --bg-color: yellow;
+}
+
+p {
+    color: var(--red);
+    background: var(--bg-color);
+}

@@ -5,7 +5,7 @@ var scss = require('postcss-scss')
 var less = require('postcss-less')
 var util = require('util')
 
-var src = 'h1{font-size:12px;color:blue;}\n@media(max-width: 800px){color:purple; p{color:red;}}'
+var src = 'h1.app{font-size:12px;color:blue;}\n@media(max-width: 800px){color:purple; p{color:red;}}'
 
 var reOneRule = /^(?:charset|import|namespace)/
 var reGroupRule = /^(?:media|document|supports|page|keyframes)/
@@ -14,6 +14,8 @@ var reGroupRule = /^(?:media|document|supports|page|keyframes)/
 // var backSlash = util.inspect({'\\_':1}).length===12 ? '\\' : '\\\\'
 
 function camelCase (input) {
+  // skip --color props
+  if(/^-{2,}/.test(input)) return input
   // make -ms-prop result in msProp
   if(input.indexOf('-ms-')===0) input = input.slice(1)
   return input.toLowerCase().replace(/-(.)/g, function (match, char) {
@@ -79,6 +81,10 @@ function convertObj (src, format, option) {
   if(!ast) return {}
 
   var name = function (v) {
+
+    // if(v.selector) {
+    //   console.log(v.selector)
+    // }
 
     if (v.type == 'atrule') return util.format(
       '@%s %s',
