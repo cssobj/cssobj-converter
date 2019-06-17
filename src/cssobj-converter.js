@@ -264,9 +264,11 @@ function convertObj (src, format, option) {
   })
 
   const obj = transformMixin(store)
+  const {classes, ids} = nameStore
   return option.nameStore ? {
     obj,
-    nameStore
+    classes,
+    ids
   } : obj
 }
 

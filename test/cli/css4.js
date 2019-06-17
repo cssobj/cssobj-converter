@@ -10,8 +10,6 @@ exports.default = {
       color: 'var(--red)'
     }
   },
-  nameStore: {
-      classes: {app: 'app'},
-      ids: {},
-  }
+    classes: {app: 'app'},
+    ids: {},
 }
