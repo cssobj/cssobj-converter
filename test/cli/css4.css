@@ -3,7 +3,7 @@
     --bg-color: yellow;
 }
 
-p {
+p.app {
     color: var(--red);
     background: var(--bg-color);
 }

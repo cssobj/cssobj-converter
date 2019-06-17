@@ -1,11 +1,12 @@
 var cssobjPluginGencss = require('cssobj-plugin-gencss')
 var cssobjCore = require('cssobj-core')
 var postcss = require('postcss')
+var selectorParser = require('postcss-selector-parser')
 var scss = require('postcss-scss')
 var less = require('postcss-less')
 var util = require('util')
 
-var src = 'h1.app{font-size:12px;color:blue;}\n@media(max-width: 800px){color:purple; p{color:red;}}'
+var src = 'h1#ioj.app{font-size:12px;color:blue;}\n@media(max-width: 800px){color:purple; p{color:red;}}'
 
 var reOneRule = /^(?:charset|import|namespace)/
 var reGroupRule = /^(?:media|document|supports|page|keyframes)/
@@ -80,6 +81,35 @@ function convertObj (src, format, option) {
 
   if(!ast) return {}
 
+  // get class, id selector names
+  var nameStore = {
+    classes: {},
+    ids: {}
+  }
+  const extractNames = selectors => {
+    selectors.walkClasses((selector) => {
+        // do something with the selector
+        // console.log('class:', String(selector))
+        const name = String(selector).slice(1)
+        if(/[\(\[,\s\>\~\+]/.test(name)) return
+        nameStore.classes[name] = String(name)
+    })
+    selectors.walkIds((selector) => {
+      // do something with the selector
+      // console.log('id:', String(selector))
+      const name = String(selector).slice(1)
+      nameStore.ids[name] = String(name)
+    })
+  }
+  var selectorProcessor = selectorParser(extractNames)
+  const selectorPlugin = postcss.plugin('extractNames', (options) => {
+    return (root) => {
+        root.walkRules(rule => {
+            selectorProcessor.processSync(rule);
+        });
+    };
+  })
+
   var name = function (v) {
 
     // if(v.selector) {
@@ -149,6 +179,7 @@ function convertObj (src, format, option) {
         var arrMix = parseMixin(v.selector)
         if(arrExt) v.selector = arrExt[0]
       }
+      selectorProcessor.processSync(v.selector)
       var sel = name(v)
       var body = {}
       // it's LESS :extend / mixin
@@ -232,7 +263,11 @@ function convertObj (src, format, option) {
     }
   })
 
-  return transformMixin(store)
+  const obj = transformMixin(store)
+  return option.nameStore ? {
+    obj,
+    nameStore
+  } : obj
 }
 
 function transformMixin(obj) {
@@ -263,4 +298,4 @@ function arrayKV (obj, k, v, reverse, unique) {
 
 module.exports = convertObj
 
-// console.log( convertObj(src)  )
+// console.log( convertObj(src) )

@@ -89,8 +89,8 @@ describe('Test cli converter', function () {
     testCli('test/cli/test.css', ['-p', false], 'file::test/cli/test.js', done)
   })
 
-  it('with pretty false', function (done) {
-    testCli('test/cli/css4.css', ['-p', false], 'file::test/cli/css4.js', done)
+  it('with css4 && nameStore', function (done) {
+    testCli('test/cli/css4.css', ['-p', false, '-n', true], 'file::test/cli/css4.js', done)
   })
 
   it('with pretty true', function (done) {

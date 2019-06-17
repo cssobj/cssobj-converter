@@ -20,6 +20,7 @@ var allowedArgs = {
   'e': 'export',
   'f': 'format',
   'k': 'keepVendor',
+  'n': 'nameStore',
   'c': 'css',
   'w': 'watch',
   'r': 'recursive'
@@ -29,6 +30,7 @@ var args = minimist(argv, {
     'pretty',
     'watch',
     'keepVendor',
+    'nameStore',
     'recursive'
   ],
   'alias': allowedArgs,
@@ -170,7 +172,10 @@ function convertFile(file, str, format) {
         allowedArgs,
         objutil.invert(allowedArgs)
       ),
-      {keepVendor: 0}
+      {
+        keepVendor: 1,
+        nameStore: 1,
+      }
     )
   )
 

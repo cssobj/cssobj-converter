@@ -1,11 +1,17 @@
-Object.defineProperty(exports, "__esModule", { value: true });
+Object.defineProperty(exports, '__esModule', { value: true })
 exports.default = {
-  ":root": {
-    "--bg-color": "yellow",
-    "--red": "red"
+  obj: {
+    ':root': {
+      '--bg-color': 'yellow',
+      '--red': 'red'
+    },
+    'p.app': {
+      background: 'var(--bg-color)',
+      color: 'var(--red)'
+    }
   },
-  "p": {
-    "background": "var(--bg-color)",
-    "color": "var(--red)"
+  nameStore: {
+      classes: {app: 'app'},
+      ids: {},
   }
 }
