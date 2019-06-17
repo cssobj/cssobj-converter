@@ -12,6 +12,7 @@
     --watch, -w       watch [dir] for changes
     --recursive, -r   recursively convert/watch for [dir]
     --keepVendor, -k  keep vendor prefix for css props
+    --nameStore, -n   export nameStore as `classes`/`ids`, and js object as `obj`
 
   Examples:
 
