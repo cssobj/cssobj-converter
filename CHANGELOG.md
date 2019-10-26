@@ -1,3 +1,9 @@
+<a name="v2.4.2"></a>
+## [v2.4.2](https://github.com/cssobj/cssobj-converter/compare/v2.4.1...v2.4.2) (2019-10-26 21:39:55)
+
+- update docs  [dc874af](https://github.com/cssobj/cssobj-converter/commit/dc874af)
+
+
 <a name="v2.4.1"></a>
 ## [v2.4.1](https://github.com/cssobj/cssobj-converter/compare/v2.4.0...v2.4.1) (2019-10-26 21:20:09)
 
