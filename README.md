@@ -39,6 +39,7 @@ option | short | description
 --watch | -w | watch [dir] for changes **default: false**
 --recursive | -r | recursive convert all [css/less] files in [dir]; **default: false**
 --keepVendor | -k | keep vendor prefix for css props
+--nameStore | -n | export nameStore as `classes`/`ids`, and js object as `obj`
 
 If no `cssfile` and no `-c`, then cssobj will read from **STDIN**.
 
@@ -73,6 +74,9 @@ cssobj ./abc
 
 # convert all files in folder and watch
 cssobj ./abc -w
+
+# convert all files in folder and watch, result as {obj, ids, classes}
+cssobj ./abc -wn
 
 ```
 
