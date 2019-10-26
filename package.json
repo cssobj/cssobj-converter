@@ -36,7 +36,8 @@
     "objutil": "2.11.1",
     "postcss": "^5.0.21",
     "postcss-less": "^0.14.0",
-    "postcss-scss": "^0.1.9"
+    "postcss-scss": "^0.1.9",
+    "postcss-selector-parser": "^6.0.2"
   },
   "devDependencies": {
     "chai": "^3.5.0",
