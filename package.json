@@ -1,6 +1,6 @@
 {
   "name": "cssobj-converter",
-  "version": "2.3.3",
+  "version": "2.3.4",
   "description": "Convert from normal css/LESS/SASS/SCSS to cssobj",
   "keywords": [
     "cssobj",
