@@ -1,3 +1,9 @@
+<a name="v2.4.1"></a>
+## [v2.4.1](https://github.com/cssobj/cssobj-converter/compare/v2.4.0...v2.4.1) (2019-10-26 21:20:09)
+
+- fix(deps): missing postcss-selector-parser  [0365193](https://github.com/cssobj/cssobj-converter/commit/0365193)
+
+
 <a name="v2.3.4"></a>
 ## [v2.3.4](https://github.com/cssobj/cssobj-converter/compare/2.1.3...v2.3.4) (2019-10-26 21:14:54)
 
