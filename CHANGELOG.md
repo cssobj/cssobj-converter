@@ -1,3 +1,9 @@
+<a name="v2.4.3"></a>
+## [v2.4.3](https://github.com/cssobj/cssobj-converter/compare/v2.4.2...v2.4.3) (2019-12-12 18:00:34)
+
+- cli: add reactNative option  [fc28d70](https://github.com/cssobj/cssobj-converter/commit/fc28d70)
+
+
 <a name="v2.4.2"></a>
 ## [v2.4.2](https://github.com/cssobj/cssobj-converter/compare/v2.4.1...v2.4.2) (2019-10-26 21:39:55)
 
