@@ -21,14 +21,16 @@ var allowedArgs = {
   'f': 'format',
   'k': 'keepVendor',
   'n': 'nameStore',
+  'r': 'reactNative',
   'c': 'css',
   'w': 'watch',
-  'r': 'recursive'
+  'i': 'recursive'
 }
 var args = minimist(argv, {
   'boolean': [
     'pretty',
     'watch',
+    'reactNative',
     'keepVendor',
     'nameStore',
     'recursive'

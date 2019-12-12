@@ -263,8 +263,15 @@ function convertObj (src, format, option) {
     }
   })
 
-  const obj = transformMixin(store)
+  var obj = transformMixin(store)
   const {classes, ids} = nameStore
+  if(option.reactNative) {
+    const newObj = {}
+    for(let k in obj) {
+      newObj[k.replace(/^\./, '')] = obj[k]
+    }
+    obj = newObj
+  }
   return option.nameStore ? {
     obj,
     classes,
